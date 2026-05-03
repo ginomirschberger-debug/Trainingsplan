@@ -1,0 +1,789 @@
+<!DOCTYPE html>
+
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="OstseeMan 2026">
+<meta name="theme-color" content="#f4f6f0">
+<title>OstseeMan & Rom 2026</title>
+<link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 180 180'%3E%3Crect width='180' height='180' fill='%232d4a2b' rx='40'/%3E%3Ctext x='90' y='115' text-anchor='middle' font-size='90' fill='%23faf9f6'%3E🏊%3C/text%3E%3C/svg%3E">
+<link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:wght@700&family=DM+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#f4f6f0;--s1:#fff;--s2:#eef0e8;--s3:#e4e8dc;--bd:#d0d8c4;--bd2:#b8c4a8;--swim:#2a7a5a;--bike:#8a6a18;--run:#4a6a2a;--brick:#7a4a8a;--str:#8a4a1a;--race:#b83a1a;--course:#1a7a4a;--tx:#1a2418;--dim:#5a6a50;--mu:#9aaa8a;--done:#e8f0e0;--r:14px;--deep:#2d4a2b;--ol:#5a7248;--iv:#faf9f6}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+body{font-family:'DM Mono',monospace;background:var(--bg);color:var(--tx);min-height:100vh;padding-bottom:calc(68px + env(safe-area-inset-bottom));font-size:15px;-webkit-text-size-adjust:100%}
+.nav{position:sticky;top:0;z-index:200;background:rgba(244,246,240,.97);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border-bottom:1px solid var(--bd);padding:0 16px;display:flex;align-items:center;justify-content:space-between;height:52px;padding-top:env(safe-area-inset-top);height:calc(52px + env(safe-area-inset-top))}
+.nav-t{font-family:'Libre Baskerville',serif;font-size:15px;font-weight:700;color:var(--tx)}
+.nav-cd{font-size:9px;letter-spacing:1.5px;text-transform:uppercase;color:var(--race)}
+.view{display:none;padding:16px;max-width:600px;margin:0 auto}
+.view.on{display:block}
+.weeknav{display:flex;align-items:center;gap:8px;margin-bottom:4px}
+.weeknav-arrow{width:36px;height:36px;border-radius:50%;border:1px solid var(--bd);background:var(--s1);color:var(--dim);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0;transition:all .2s;font-family:'DM Mono',monospace}
+.weeknav-arrow:active{background:var(--s3);transform:scale(0.92)}
+.weeknav-arrow:disabled{opacity:.3}
+.weeknav-center{flex:1;text-align:center;min-width:0}
+.dwk{font-family:'Libre Baskerville',serif;font-size:20px;font-weight:700;color:var(--tx);line-height:1.2}
+.weeknav-today{font-size:9px;letter-spacing:1.5px;text-transform:uppercase;padding:4px 10px;border-radius:10px;background:var(--ol);color:var(--iv);border:none;cursor:pointer;font-family:'DM Mono',monospace;margin-left:6px;display:none}
+.weeknav-today.on{display:inline-block}
+.dh-row{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;padding:0 4px}
+.pbadge{font-size:9px;letter-spacing:1.5px;text-transform:uppercase;padding:3px 10px;border-radius:20px;background:rgba(90,114,72,.1);color:var(--ol);border:1px solid rgba(90,114,72,.25)}
+.ddates{font-size:10px;color:var(--dim)}
+.now-pill{font-size:9px;letter-spacing:1.5px;text-transform:uppercase;padding:2px 8px;border-radius:10px;background:rgba(90,114,72,.15);color:var(--ol);font-weight:500;display:inline-block;margin-left:6px}
+.race-pill{background:rgba(184,58,26,.1);color:var(--race);font-size:9px;letter-spacing:1.5px;text-transform:uppercase;padding:2px 8px;border-radius:10px;margin-left:6px}
+.taper-pill{background:rgba(138,106,24,.1);color:var(--bike);font-size:9px;letter-spacing:1.5px;text-transform:uppercase;padding:2px 8px;border-radius:10px;margin-left:6px}
+.pc{display:flex;align-items:center;gap:16px;background:var(--s1);border:1px solid var(--bd);border-radius:var(--r);padding:16px;margin:12px 0 20px;box-shadow:0 1px 4px rgba(45,74,43,.07)}
+svg.ring{transform:rotate(-90deg)}
+.rbg{fill:none;stroke:var(--bd);stroke-width:6}
+.rfi{fill:none;stroke-width:6;stroke-linecap:round;transition:stroke-dashoffset .5s}
+.pn{font-family:'Libre Baskerville',serif;font-size:28px;font-weight:700;color:var(--tx);line-height:1}
+.pl{font-size:10px;color:var(--dim);margin-top:4px;letter-spacing:1px;text-transform:uppercase}
+.pv{font-size:11px;color:var(--dim);margin-top:8px}
+.sec{font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--dim);margin:0 0 10px}
+.wc{background:var(--s1);border:1px solid var(--bd);border-radius:var(--r);margin-bottom:10px;overflow:hidden;box-shadow:0 1px 3px rgba(45,74,43,.06)}
+.wc.done{background:var(--done);border-color:rgba(74,106,42,.3);opacity:.72}
+.wc.rcx{background:rgba(184,58,26,.03);border-color:rgba(184,58,26,.3)}
+.wb{height:3px}
+.wb.swim{background:var(--swim)}.wb.bike{background:var(--bike)}.wb.run{background:var(--run)}.wb.brick{background:var(--brick)}.wb.str{background:var(--str)}.wb.race{background:var(--race)}.wb.course{background:var(--course)}
+.wct{display:flex;align-items:center;gap:12px;padding:14px 14px 10px;cursor:pointer}
+.wic{width:42px;height:42px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0}
+.wic.swim{background:rgba(42,122,90,.12)}.wic.bike{background:rgba(138,106,24,.12)}.wic.run{background:rgba(74,106,42,.12)}.wic.brick{background:rgba(122,74,138,.12)}.wic.str{background:rgba(138,74,26,.12)}.wic.race{background:rgba(184,58,26,.12)}.wic.course{background:rgba(26,122,74,.15)}
+.wif{flex:1;min-width:0}
+.wti{font-family:'Libre Baskerville',serif;font-size:15px;font-weight:700;color:var(--tx);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.wme{font-size:11px;color:var(--dim);margin-top:2px}
+.wck{width:32px;height:32px;border-radius:50%;border:2px solid var(--bd2);background:none;display:flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0;font-size:14px;color:var(--dim);transition:all .2s}
+.wc.done .wck{background:rgba(90,114,72,.15);border-color:var(--ol);color:var(--ol)}
+.wtg{display:flex;gap:5px;flex-wrap:wrap;padding:0 14px 10px}
+.tg{font-size:9px;letter-spacing:1px;text-transform:uppercase;font-weight:500;padding:2px 7px;border-radius:4px}
+.tg.m{background:rgba(184,58,26,.08);color:var(--race);border:1px solid rgba(184,58,26,.2)}
+.tg.o{background:rgba(90,114,72,.08);color:var(--ol);border:1px solid rgba(90,114,72,.2)}
+.tg.n{background:rgba(138,106,24,.08);color:var(--bike);border:1px solid rgba(138,106,24,.2)}
+.tg.k{background:rgba(26,122,74,.08);color:var(--course);border:1px solid rgba(26,122,74,.2)}
+.tg.h{background:rgba(122,74,138,.08);color:var(--brick);border:1px solid rgba(122,74,138,.2)}
+.wbd{display:none;padding:0 14px 12px;font-size:12px;color:var(--dim);line-height:1.65}
+.wbd.on{display:block}
+.wtip{margin-top:8px;padding:8px 10px;background:rgba(138,106,24,.06);border-left:2px solid rgba(138,106,24,.3);border-radius:0 6px 6px 0;font-size:11px;line-height:1.6}
+.wtip b{color:var(--bike)}
+.wsb{margin-top:8px;padding:8px 10px;background:rgba(138,74,26,.06);border-left:2px solid rgba(138,74,26,.3);border-radius:0 6px 6px 0;font-size:11px;line-height:1.8}
+.wsb strong{color:var(--str);display:block;margin-bottom:3px}
+.wgb{margin-top:6px;padding:6px 10px;background:rgba(42,90,122,.06);border:1px solid rgba(42,90,122,.15);border-radius:6px;font-size:10px;color:#2a5a7a}
+.psc{display:flex;gap:6px;overflow-x:auto;padding-bottom:4px;scrollbar-width:none;margin-bottom:16px;-webkit-overflow-scrolling:touch}
+.psc::-webkit-scrollbar{display:none}
+.phb{font-size:10px;letter-spacing:1px;text-transform:uppercase;font-weight:500;padding:7px 14px;border-radius:20px;white-space:nowrap;border:1.5px solid var(--bd);background:none;color:var(--dim);cursor:pointer;font-family:'DM Mono',monospace;transition:all .2s}
+.phb.on{background:var(--s2);border-color:var(--ol);color:var(--tx)}
+.wr{background:var(--s1);border:1px solid var(--bd);border-radius:var(--r);margin-bottom:10px;overflow:hidden;box-shadow:0 1px 3px rgba(45,74,43,.05)}
+.wr.cw{border-color:rgba(90,114,72,.5)}.wr.rw{border-color:rgba(184,58,26,.35)}.wr.tw{border-color:rgba(138,106,24,.3)}
+.wh{display:flex;align-items:center;padding:14px 16px;gap:10px;background:var(--s2);cursor:pointer;user-select:none;-webkit-user-select:none}
+.wh:active{background:var(--bd)}
+.wnum{font-family:'Libre Baskerville',serif;font-size:18px;font-weight:700;color:var(--mu);width:32px;flex-shrink:0}
+.wr.cw .wnum{color:var(--ol)}
+.wi2{flex:1}
+.wna{font-family:'Libre Baskerville',serif;font-size:14px;font-weight:700;color:var(--tx)}
+.wda{font-size:10px;color:var(--dim);margin-top:1px}
+.wr2{display:flex;flex-direction:column;align-items:flex-end;gap:4px}
+.wpg{font-size:10px;color:var(--run)}
+.wch{font-size:11px;color:var(--dim);transition:transform .2s;margin-left:4px}
+.wr.op .wch{transform:rotate(90deg)}
+.wpo{display:none;padding:0 12px 12px}
+.wr.op .wpo{display:block}
+.bxr{font-size:9px;padding:2px 7px;border-radius:10px;background:rgba(184,58,26,.1);color:var(--race);border:1px solid rgba(184,58,26,.2)}
+.bxt{font-size:9px;padding:2px 7px;border-radius:10px;background:rgba(138,106,24,.1);color:var(--bike);border:1px solid rgba(138,106,24,.2)}
+.stb{display:flex;gap:6px;margin-bottom:16px;overflow-x:auto;scrollbar-width:none;-webkit-overflow-scrolling:touch}
+.stb::-webkit-scrollbar{display:none}
+.stbb{font-size:10px;letter-spacing:1px;text-transform:uppercase;padding:7px 14px;border-radius:20px;border:1.5px solid var(--bd);background:none;color:var(--dim);cursor:pointer;font-family:'DM Mono',monospace;transition:all .2s;white-space:nowrap}
+.stbb.on{background:var(--s2);border-color:var(--ol);color:var(--tx)}
+.sg{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:16px}
+.sc{background:var(--s1);border:1px solid var(--bd);border-radius:var(--r);padding:16px;box-shadow:0 1px 3px rgba(45,74,43,.05)}
+.sn{font-family:'Libre Baskerville',serif;font-size:28px;font-weight:700}
+.sl{font-size:10px;color:var(--dim);margin-top:4px;letter-spacing:1px;text-transform:uppercase}
+.legr{display:flex;align-items:center;justify-content:space-between;padding:12px 0;border-bottom:1px solid var(--bd)}
+.legr:last-child{border-bottom:none}
+.legl{display:flex;align-items:center;gap:10px}
+.legd{width:10px;height:10px;border-radius:50%}
+.cw2{background:var(--s1);border:1px solid var(--bd);border-radius:var(--r);padding:16px;margin-bottom:12px;box-shadow:0 1px 3px rgba(45,74,43,.05)}
+.ct{font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--dim);margin-bottom:12px}
+.cleg{display:flex;gap:12px;margin-bottom:10px;flex-wrap:wrap}
+.cli{display:flex;align-items:center;gap:5px;font-size:10px;color:var(--dim)}
+.cld{width:8px;height:8px;border-radius:2px}
+.cs{overflow-x:auto;scrollbar-width:none;-webkit-overflow-scrolling:touch}
+.cs::-webkit-scrollbar{display:none}
+.fi{display:flex;align-items:flex-start;gap:12px;padding:12px 0;border-bottom:1px solid var(--bd)}
+.fi:last-child{border-bottom:none}
+.fdot{width:10px;height:10px;border-radius:50%;flex-shrink:0;margin-top:4px}
+.fb{flex:1;min-width:0}
+.ft{font-size:13px;color:var(--tx);font-weight:500}
+.fm{font-size:11px;color:var(--dim);margin-top:3px}
+.fss{display:flex;gap:6px;flex-wrap:wrap;margin-top:6px}
+.fs{font-size:10px;padding:2px 8px;border-radius:4px;background:var(--s2);color:var(--tx)}
+.rl{background:rgba(74,106,42,.1);color:var(--run)}.rm{background:rgba(138,106,24,.1);color:var(--bike)}.rh{background:rgba(184,58,26,.1);color:var(--race)}
+.gtg{background:rgba(42,90,122,.08);color:#2a5a7a;border:1px solid rgba(42,90,122,.15)}
+.mbd{position:fixed;inset:0;z-index:500;background:rgba(0,0,0,.4);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);display:flex;align-items:flex-end;justify-content:center;opacity:0;pointer-events:none;transition:opacity .2s}
+.mbd.on{opacity:1;pointer-events:all}
+.mo{background:var(--iv);border:1px solid var(--bd2);border-radius:20px 20px 0 0;padding:20px 20px calc(40px + env(safe-area-inset-bottom));width:100%;max-width:600px;transform:translateY(100%);transition:transform .3s cubic-bezier(.32,.72,0,1);max-height:90vh;overflow-y:auto}
+.mbd.on .mo{transform:translateY(0)}
+.mhd{width:40px;height:4px;background:var(--bd2);border-radius:2px;margin:0 auto 18px}
+.mti{font-family:'Libre Baskerville',serif;font-size:17px;font-weight:700;color:var(--tx);margin-bottom:4px}
+.msu{font-size:11px;color:var(--dim);margin-bottom:20px}
+.lf{margin-bottom:16px}
+.ll{font-size:10px;letter-spacing:1.5px;text-transform:uppercase;color:var(--dim);margin-bottom:6px;display:block}
+.li{width:100%;background:var(--bg);border:1px solid var(--bd2);border-radius:10px;padding:12px 14px;font-family:'DM Mono',monospace;font-size:14px;color:var(--tx);outline:none;transition:border-color .2s}
+.li:focus{border-color:var(--ol)}
+.li::placeholder{color:var(--mu)}
+.rrow{display:flex;gap:5px}
+.rbtn{flex:1;padding:10px 2px;border-radius:8px;border:1px solid var(--bd2);background:var(--bg);color:var(--dim);font-size:11px;font-weight:500;cursor:pointer;font-family:'DM Mono',monospace;text-align:center;transition:all .15s}
+.ma{display:flex;gap:10px;margin-top:20px}
+.mbtn{flex:1;padding:14px;border-radius:12px;border:none;cursor:pointer;font-family:'DM Mono',monospace;font-size:13px;font-weight:500;transition:all .2s}
+.mbtn.pr{background:var(--deep);color:var(--iv)}
+.mbtn.se{background:var(--s2);color:var(--tx);border:1px solid var(--bd2)}
+.mbtn.sk{background:none;color:var(--dim);border:1px solid var(--bd);flex:0;padding:14px 16px}
+.dz{border:2px dashed var(--bd2);border-radius:var(--r);background:var(--s1);padding:40px 20px;text-align:center;cursor:pointer;transition:all .2s;position:relative;margin-bottom:20px}
+.dz.drag{border-color:var(--ol);background:rgba(90,114,72,.05)}
+.dz input{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%}
+.dz-ico{font-size:36px;margin-bottom:10px}
+.dz-t{font-family:'Libre Baskerville',serif;font-size:16px;font-weight:700;color:var(--tx);margin-bottom:6px}
+.dz-s{font-size:11px;color:var(--dim);line-height:1.6}
+.mc{background:var(--s1);border:1px solid var(--bd);border-radius:var(--r);margin-bottom:10px;overflow:hidden;box-shadow:0 1px 3px rgba(45,74,43,.05)}
+.mc.conf{border-color:rgba(74,106,42,.4);background:rgba(74,106,42,.02)}
+.mc.skip{opacity:.4}.mc.noma{border-color:rgba(184,58,26,.2)}
+.mcb{height:3px}
+.mcb.run{background:var(--run)}.mcb.bike{background:var(--bike)}.mcb.swim{background:var(--swim)}.mcb.str{background:var(--str)}.mcb.other{background:var(--mu)}
+.mct{display:flex;align-items:flex-start;gap:12px;padding:14px 14px 10px}
+.mci{width:40px;height:40px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0}
+.mci.run{background:rgba(74,106,42,.1)}.mci.bike{background:rgba(138,106,24,.1)}.mci.swim{background:rgba(42,122,90,.1)}.mci.str{background:rgba(138,74,26,.1)}.mci.other{background:rgba(90,106,80,.1)}
+.mcif{flex:1;min-width:0}
+.mctit{font-family:'Libre Baskerville',serif;font-size:14px;font-weight:700;color:var(--tx)}
+.mcda{font-size:10px;color:var(--dim);margin-top:2px}
+.mcst{display:flex;gap:6px;flex-wrap:wrap;margin-top:6px}
+.mcs{font-size:10px;padding:2px 8px;border-radius:4px;background:var(--s2);color:var(--tx)}
+.mcm{padding:0 14px 10px}
+.mcml{font-size:9px;letter-spacing:1.5px;text-transform:uppercase;color:var(--dim);margin-bottom:5px}
+.mcmp{font-size:12px;color:var(--tx);padding:7px 10px;background:rgba(74,106,42,.08);border:1px solid rgba(74,106,42,.2);border-radius:8px}
+.mcmp.nm{background:rgba(184,58,26,.06);border-color:rgba(184,58,26,.2);color:var(--race)}
+.mcsel{width:100%;background:var(--bg);border:1px solid var(--bd2);border-radius:8px;padding:7px 10px;font-family:'DM Mono',monospace;font-size:11px;color:var(--tx);margin-bottom:6px;outline:none}
+.mca{display:flex;gap:6px;padding:0 14px 14px}
+.mcbtn{flex:1;padding:9px;border-radius:8px;border:none;cursor:pointer;font-family:'DM Mono',monospace;font-size:11px;font-weight:500;transition:all .2s}
+.mcbtn.conf{background:var(--deep);color:var(--iv)}
+.mcbtn.cdone{background:rgba(74,106,42,.12);color:var(--run);border:1px solid rgba(74,106,42,.3);cursor:default}
+.mcbtn.sk2{background:var(--s2);color:var(--dim);border:1px solid var(--bd)}
+.sbar{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px}
+.spill{background:var(--s1);border:1px solid var(--bd);border-radius:20px;padding:5px 12px;font-size:11px;color:var(--dim)}
+.spill span{color:var(--tx);font-weight:500}
+.sbanner{background:rgba(74,106,42,.08);border:1px solid rgba(74,106,42,.25);border-radius:var(--r);padding:20px;text-align:center;margin-top:16px}
+.sbanner h3{font-family:'Libre Baskerville',serif;font-size:18px;font-weight:700;color:var(--run);margin-bottom:6px}
+.sbanner p{font-size:12px;color:var(--dim);line-height:1.6}
+.fimp{background:var(--deep);color:var(--iv);border:none;border-radius:12px;padding:14px;font-family:'DM Mono',monospace;font-size:13px;font-weight:500;cursor:pointer;width:100%;margin-top:12px}
+.fimp:disabled{opacity:.4;cursor:default}
+.freset{background:none;border:1px solid var(--bd);border-radius:12px;padding:10px;font-family:'DM Mono',monospace;font-size:11px;color:var(--dim);cursor:pointer;width:100%;margin-top:8px}
+.bnav{position:fixed;bottom:0;left:0;right:0;z-index:300;background:rgba(244,246,240,.97);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border-top:1px solid var(--bd);display:flex;padding-bottom:env(safe-area-inset-bottom)}
+.bb{flex:1;padding:10px 8px 8px;display:flex;flex-direction:column;align-items:center;gap:3px;background:none;border:none;cursor:pointer;color:var(--dim);font-family:'DM Mono',monospace;transition:color .2s}
+.bb.on{color:var(--ol)}
+.bi{font-size:18px;line-height:1}
+.bla{font-size:9px;letter-spacing:1px;text-transform:uppercase}
+.rule{height:1px;background:var(--bd);margin:20px 0}
+.emp{text-align:center;padding:40px 20px;color:var(--dim);font-size:13px;line-height:1.7}
+.lod{text-align:center;padding:60px 20px;color:var(--dim);font-size:12px}
+.installhint{background:rgba(42,122,90,.08);border:1px solid rgba(42,122,90,.25);border-radius:var(--r);padding:14px;margin-bottom:16px;font-size:11px;line-height:1.6;color:var(--swim)}
+.installhint b{color:var(--swim)}
+.installhint .close-hint{float:right;background:none;border:none;font-size:16px;color:var(--swim);cursor:pointer;padding:0;margin-left:8px;line-height:1}
+.exportbtn{background:var(--s1);border:1px solid var(--bd);border-radius:8px;padding:10px;font-family:'DM Mono',monospace;font-size:11px;color:var(--tx);cursor:pointer;margin-top:8px;width:100%}
+</style>
+</head>
+<body>
+<div class="nav">
+  <div><div class="nav-t">OstseeMan & Rom 2026</div></div>
+  <div class="nav-cd" id="ncd">–</div>
+</div>
+<div class="view on" id="vd">
+  <div class="lod" id="dlo">Lade…</div>
+  <div id="dc" style="display:none">
+    <div class="installhint" id="installhint" style="display:none">
+      <button class="close-hint" data-action="closeHint">×</button>
+      <b>📱 Tipp:</b> Tippe auf <b>Teilen</b> → <b>Zum Home-Bildschirm</b>, um den Plan wie eine App zu nutzen.
+    </div>
+    <div class="weeknav">
+      <button class="weeknav-arrow" id="wnPrev" data-action="prevWk">‹</button>
+      <div class="weeknav-center"><div class="dwk" id="dwk">–</div></div>
+      <button class="weeknav-arrow" id="wnNext" data-action="nextWk">›</button>
+    </div>
+    <div class="dh-row">
+      <div><div class="ddates" id="ddt">–</div></div>
+      <div>
+        <span class="pbadge" id="dph">–</span>
+        <button class="weeknav-today" id="wnToday" data-action="goToday">Heute</button>
+      </div>
+    </div>
+    <div class="pc">
+      <div><svg class="ring" width="64" height="64" viewBox="0 0 64 64">
+        <circle class="rbg" cx="32" cy="32" r="27"/>
+        <circle class="rfi" id="rf" cx="32" cy="32" r="27" stroke="url(#rg)" stroke-dasharray="169.6" stroke-dashoffset="169.6"/>
+        <defs><linearGradient id="rg" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" stop-color="#4a6a2a"/><stop offset="100%" stop-color="#2a7a5a"/></linearGradient></defs>
+      </svg></div>
+      <div style="flex:1">
+        <div class="pn"><span id="ddo">0</span><span style="font-size:16px;color:var(--dim)"> / <span id="dto">0</span></span></div>
+        <div class="pl">Pflicht erledigt</div>
+        <div class="pv">Volumen: <span id="dvol">–</span></div>
+      </div>
+    </div>
+    <div class="sec" id="dmt"></div><div id="dmand"></div>
+    <div class="sec" id="dot" style="margin-top:16px"></div><div id="dopt"></div>
+    <div class="rule"></div>
+    <div style="font-size:12px;color:var(--dim);line-height:1.8">‹ › blättern · <span style="color:var(--tx);font-weight:500">Pflicht</span> = diese Woche · <span style="color:var(--tx);font-weight:500">Optional</span> = nach Gefühl.</div>
+  </div>
+</div>
+<div class="view" id="vp"><div class="psc" id="psc"></div><div id="pw"></div></div>
+<div class="view" id="vs">
+  <div class="stb">
+    <button class="stbb on" data-stab="ov">Übersicht</button>
+    <button class="stbb" data-stab="ch">Volumen</button>
+    <button class="stbb" data-stab="lg">Aktivitäten</button>
+  </div>
+  <div id="sov"><div class="sg" id="sg"></div><div class="rule"></div><div class="sec">Nach Typ</div><div id="leglist"></div>
+    <div class="rule"></div>
+    <div class="sec">Daten</div>
+    <button class="exportbtn" data-action="exportData">📥 Daten exportieren (JSON Backup)</button>
+    <button class="exportbtn" data-action="importData">📤 Daten importieren</button>
+    <input type="file" id="importFile" accept=".json" style="display:none">
+  </div>
+  <div id="sch" style="display:none">
+    <div class="cw2"><div class="ct">Geplant vs. Tatsächlich · Min/Woche</div><div class="cleg" id="cleg"></div><div class="cs"><canvas id="cvv" height="200"></canvas></div></div>
+    <div class="cw2"><div class="ct">RPE-Verlauf</div><div class="cs"><canvas id="cvr" height="160"></canvas></div></div>
+  </div>
+  <div id="slg" style="display:none"><div id="feed"></div></div>
+</div>
+<div class="view" id="vg">
+  <div id="gup">
+    <div class="dz" id="dz">
+      <input type="file" accept=".csv" id="gfile">
+      <div class="dz-ico">📂</div>
+      <div class="dz-t">Garmin CSV importieren</div>
+      <div class="dz-s">Garmin Connect → Aktivitäten → Export CSV</div>
+    </div>
+  </div>
+  <div id="gres" style="display:none">
+    <div class="sbar" id="gsbar"></div>
+    <div class="sec" id="gmtit"></div><div id="gmlist"></div>
+    <div class="sec" id="gntit"></div><div id="gnlist"></div>
+    <button class="fimp" id="gimpbtn" disabled data-action="gcommit">Alle bestätigten importieren</button>
+    <button class="freset" data-action="greset">← Neue CSV importieren</button>
+    <div id="gsucc" style="display:none"></div>
+  </div>
+</div>
+<div class="mbd" id="mbd">
+  <div class="mo">
+    <div class="mhd"></div>
+    <div class="mti" id="mti">Einheit abschließen</div>
+    <div class="msu" id="msu"></div>
+    <div class="lf"><label class="ll">Tatsächliche Dauer (min)</label><input class="li" id="ldu" type="number" inputmode="numeric" placeholder="z.B. 47" min="1" max="600"></div>
+    <div class="lf" id="ldf"><label class="ll">Strecke (km)</label><input class="li" id="ldi" type="number" inputmode="decimal" placeholder="z.B. 12.4" step="0.1" min="0"></div>
+    <div class="lf"><label class="ll">RPE – Intensität (1–10)</label><div class="rrow" id="rrow"></div></div>
+    <div class="lf"><label class="ll">Notiz (optional)</label><input class="li" id="lno" type="text" placeholder="Gefühl, Besonderes…"></div>
+    <div class="ma">
+      <button class="mbtn sk" data-action="slog">Überspringen</button>
+      <button class="mbtn se" data-action="closeM">Abbrechen</button>
+      <button class="mbtn pr" data-action="savelog">Speichern ✓</button>
+    </div>
+  </div>
+</div>
+<div class="bnav">
+  <button class="bb on" data-view="d"><div class="bi">⚡</div><div class="bla">Heute</div></button>
+  <button class="bb" data-view="p"><div class="bi">📅</div><div class="bla">Plan</div></button>
+  <button class="bb" data-view="s"><div class="bi">📊</div><div class="bla">Stats</div></button>
+  <button class="bb" data-view="g"><div class="bi">🔄</div><div class="bla">Garmin</div></button>
+</div>
+<script>
+const STR={A:{l:"Kraft A – Unterkörper/Lauf-Stab.",e:"3×8 Bulg. Kniebeuge je Bein · 3×10 RDL · 3×12 Hip Thrust · 3×15 Calf Raises einbeinig · 2×45s Copenhagen Plank"},B:{l:"Kraft B – Schulter/Rumpf/Schwimm",e:"3×10 Klimmzug-Negativ · 3×12 DB Shoulder Press · 3×15 Face Pull · 3×10 Pallof Press · 3×30s Dead Bug"},C:{l:"Kraft C – Ganzkörper",e:"3×6 Trap Bar Deadlift · 3×8 Step-Up · 3×10 Single-Arm Row · 3×12 Reverse Lunge · 2×60s Plank"},MINI:{l:"Kraft Mini – 20min",e:"2×10 Hip Thrust · 2×8 Einbein-Kniebeuge · 2×12 Calf Raises · 2×10 Band Pull-Apart · 2×20s Copenhagen Plank"}};
+const TM={swim:{i:"🏊",c:"var(--swim)",l:"Schwimmen"},bike:{i:"🚴",c:"var(--bike)",l:"Rad"},run:{i:"🏃",c:"var(--run)",l:"Laufen"},brick:{i:"⚡",c:"var(--brick)",l:"Brick"},str:{i:"💪",c:"var(--str)",l:"Kraft"},race:{i:"🏁",c:"var(--race)",l:"Wettkampf"},course:{i:"🏊",c:"var(--course)",l:"Kurs"}};
+const DT=["swim","bike","run","brick","course"];
+function pm(d){if(!d||d==="Race")return 0;const h=d.match(/(\d+)h/),m=d.match(/(\d+)min/);return(h?+h[1]*60:0)+(m?+m[1]:0);}
+
+const P=[
+{ph:“Phase 1 · Base”,lb:“W1”,dt:“07.–13. Apr”,vo:“~9h”,wk:[
+{id:“p1w1-s1”,ty:“swim”,ti:“Technik-Einstieg”,du:“45min”,ma:true,de:“Drills: 2×50m Catch-up → 2×50m Faust → 2×50m Seitkick. Dann 4×100m ruhig.”,tg:[“Pflicht”],tp:“Nach jedem Drill 10s Pause.”},
+{id:“p1w1-s2”,ty:“swim”,ti:“Wasserlage & Armzug”,du:“40min”,ma:false,de:“6×50m mit bewusstem Reach–Catch–Pull.”,tg:[“Optional”]},
+{id:“p1w1-r1”,ty:“run”,ti:“Z2 Lauf”,du:“40min”,ma:true,de:“Z2-Tempo. Letzten 5min: 4×20s Strides.”,tg:[“Pflicht”]},
+{id:“p1w1-r2”,ty:“run”,ti:“Langer Lauf”,du:“55min”,ma:true,de:“Z2 durchhalten, ruhig.”,tg:[“Pflicht”]},
+{id:“p1w1-b1”,ty:“bike”,ti:“Z2 Grundlage”,du:“75min”,ma:true,de:“Locker, 88–95rpm.”,tg:[“Pflicht”]},
+{id:“p1w1-b2”,ty:“bike”,ti:“Sweetspot-Einführung”,du:“2h”,ma:true,de:“2h Z2, letzten 20min: 2×8min @88–93% FTP.”,tg:[“Pflicht”]},
+{id:“p1w1-k1”,ty:“str”,ti:“Kraft A”,du:“25min”,ma:false,de:“Nach Rad oder Lauf.”,tg:[“Optional”],st:“A”},
+{id:“p1w1-k2”,ty:“str”,ti:“Kraft B”,du:“25min”,ma:false,de:“Schulter/Rumpf.”,tg:[“Optional”],st:“B”},
+]},
+{ph:“Phase 1 · Base”,lb:“W2”,dt:“14.–20. Apr”,vo:“~10h”,wk:[
+{id:“p1w2-s1”,ty:“swim”,ti:“Armzug-Technik”,du:“50min”,ma:true,de:“6×50m Armzug-Entry. Dann 4×100m gleichmäßig.”,tg:[“Pflicht”]},
+{id:“p1w2-s2”,ty:“swim”,ti:“Drills wiederholen”,du:“45min”,ma:false,de:“Drillserie aus W1.”,tg:[“Optional”]},
+{id:“p1w2-r1”,ty:“run”,ti:“Z2 Lauf”,du:“45min”,ma:true,de:“Z2 + 4×20s Strides.”,tg:[“Pflicht”]},
+{id:“p1w2-r2”,ty:“run”,ti:“Langer Lauf”,du:“65min”,ma:true,de:“Z2, HF-gesteuert.”,tg:[“Pflicht”]},
+{id:“p1w2-b1”,ty:“bike”,ti:“Sweetspot Block”,du:“75min”,ma:true,de:“15min WU · 2×12min @88–93% FTP · 15min CD.”,tg:[“Pflicht”]},
+{id:“p1w2-b2”,ty:“bike”,ti:“Langer Ausdauertag”,du:“2h15”,ma:true,de:“Deich, Z2 konstant.”,tg:[“Pflicht”]},
+{id:“p1w2-k1”,ty:“str”,ti:“Kraft A”,du:“25min”,ma:false,de:“Nach Rad.”,tg:[“Optional”],st:“A”},
+{id:“p1w2-k2”,ty:“str”,ti:“Kraft C”,du:“25min”,ma:false,de:“Ganzkörper.”,tg:[“Optional”],st:“C”},
+]},
+{ph:“Phase 1 · Base”,lb:“W3”,dt:“21.–27. Apr”,vo:“~11h”,wk:[
+{id:“p1w3-s1”,ty:“swim”,ti:“Technik + Intervalle”,du:“55min”,ma:true,de:“Drills 15min · 6×100m Technik, 20s Pause.”,tg:[“Pflicht”]},
+{id:“p1w3-s2”,ty:“swim”,ti:“Gefühl-Einheit”,du:“45min”,ma:false,de:“Frei schwimmen.”,tg:[“Optional”]},
+{id:“p1w3-r1”,ty:“run”,ti:“Tempo-Intervalle”,du:“45min”,ma:true,de:“10min WU · 3×8min @5:10–5:20/km · 3min Trab · 10min CD.”,tg:[“Pflicht”],tp:“Danach: nächste Session locker.”},
+{id:“p1w3-r2”,ty:“run”,ti:“Z2 Lauf (locker)”,du:“40min”,ma:false,de:“Z1–Z2, Recovery.”,tg:[“Optional”]},
+{id:“p1w3-r3”,ty:“run”,ti:“Langer Lauf”,du:“70min”,ma:true,de:“Z2 durchgehend.”,tg:[“Pflicht”]},
+{id:“p1w3-b1”,ty:“bike”,ti:“Sweetspot Aufbau”,du:“80min”,ma:true,de:“15min WU · 3×10min @90% FTP · 15min CD.”,tg:[“Pflicht”]},
+{id:“p1w3-b2”,ty:“bike”,ti:“Langer Ausdauertag”,du:“2h30”,ma:true,de:“Z2/Z3 Mix, letzten 30min: 2×10min Sweetspot.”,tg:[“Pflicht”]},
+{id:“p1w3-k1”,ty:“str”,ti:“Kraft B”,du:“25min”,ma:false,de:“Nach Rad.”,tg:[“Optional”],st:“B”},
+]},
+{ph:“Phase 1 · Base”,lb:“W4 · Erholung”,dt:“28. Apr–04. Mai”,vo:“~7h”,tp2:true,wk:[
+{id:“p1w4-s1”,ty:“swim”,ti:“Technik locker”,du:“40min”,ma:true,de:“Kein Druck.”,tg:[“Pflicht”]},
+{id:“p1w4-c1”,ty:“course”,ti:“🏊 KURS #1”,du:“60min”,ma:true,de:“Bäderland Festland · Holstenstr. 30 · Do 30. Apr · 19:45 Uhr.”,tg:[“Pflicht”,“Kurs Do 30. Apr”]},
+{id:“p1w4-r1”,ty:“run”,ti:“Z1 Lauf”,du:“30min”,ma:true,de:“Z1, sehr locker.”,tg:[“Pflicht”]},
+{id:“p1w4-b1”,ty:“bike”,ti:“Aktive Erholung”,du:“60min”,ma:true,de:“Z1–Z2.”,tg:[“Pflicht”]},
+{id:“p1w4-b2”,ty:“bike”,ti:“Kurze Z2”,du:“60min”,ma:false,de:“Optional.”,tg:[“Optional”]},
+{id:“p1w4-k1”,ty:“str”,ti:“Kraft Mini”,du:“20min”,ma:false,de:“Nur wenn erholt.”,tg:[“Optional”],st:“MINI”},
+]},
+{ph:“Phase 2 · Aufbau”,lb:“W5”,dt:“05.–11. Mai”,vo:“~10h”,wk:[
+{id:“p2w1-s1”,ty:“swim”,ti:“Kursinhalt umsetzen”,du:“45min”,ma:true,de:“Technik aus Kurs #1. 4×100m.”,tg:[“Pflicht”]},
+{id:“p2w1-c1”,ty:“course”,ti:“🏊 KURS #2”,du:“60min”,ma:true,de:“Bäderland Festland · Do 07. Mai · 19:45 Uhr.”,tg:[“Pflicht”,“Kurs Do 07. Mai”]},
+{id:“p2w1-r1”,ty:“run”,ti:“Z2 Lauf + Strides”,du:“45min”,ma:true,de:“Z2 + 4×20s Strides.”,tg:[“Pflicht”]},
+{id:“p2w1-r2”,ty:“run”,ti:“Z2 (vor Kurs)”,du:“35min”,ma:true,de:“Morgens locker vor dem Kurs-Abend.”,tg:[“Pflicht”]},
+{id:“p2w1-r3”,ty:“run”,ti:“Langer Lauf”,du:“70min”,ma:true,de:“Z2 + letzten 5min Z3.”,tg:[“Pflicht”]},
+{id:“p2w1-b1”,ty:“bike”,ti:“Waseberg Intervalle”,du:“90min”,ma:true,de:“6× Waseberg-Rampe Z4–Z5, 75–85rpm.”,tg:[“Pflicht”],tp:“Nach VO2max: nächste Einheit locker.”},
+{id:“p2w1-b2”,ty:“bike”,ti:“Langer Ausdauertag”,du:“2h30”,ma:true,de:“Z2 mit 2×15min Sweetspot @90% FTP.”,tg:[“Pflicht”]},
+{id:“p2w1-k1”,ty:“str”,ti:“Kraft A”,du:“25min”,ma:false,de:“Nach Rad.”,tg:[“Optional”],st:“A”},
+]},
+{ph:“Phase 2 · Aufbau”,lb:“W6”,dt:“12.–18. Mai”,vo:“~11h”,wk:[
+{id:“p2w2-s1”,ty:“swim”,ti:“Ausdauer + Technik”,du:“50min”,ma:true,de:“4×200m Technikfokus + 4×100m gleichmäßig.”,tg:[“Pflicht”]},
+{id:“p2w2-c1”,ty:“course”,ti:“🏊 KURS #3”,du:“60min”,ma:true,de:“Bäderland Festland · Do 21. Mai · 19:45 Uhr.”,tg:[“Pflicht”,“Kurs Do 21. Mai”]},
+{id:“p2w2-r1”,ty:“run”,ti:“Tempo-Intervalle”,du:“50min”,ma:true,de:“10min WU · 3×10min @5:00–5:10/km · 10min CD.”,tg:[“Pflicht”]},
+{id:“p2w2-r2”,ty:“run”,ti:“Z2 (vor Kurs)”,du:“35min”,ma:true,de:“Morgens locker.”,tg:[“Pflicht”]},
+{id:“p2w2-r3”,ty:“run”,ti:“Langer Lauf”,du:“75min”,ma:true,de:“Z2 gleichmäßig.”,tg:[“Pflicht”]},
+{id:“p2w2-b1”,ty:“bike”,ti:“Sweetspot Block”,du:“90min”,ma:true,de:“15min WU · 3×12min @90–93% FTP · 15min CD.”,tg:[“Pflicht”]},
+{id:“p2w2-b2”,ty:“bike”,ti:“Langer Ausdauertag”,du:“3h”,ma:true,de:“Z2, Deich.”,tg:[“Pflicht”]},
+{id:“p2w2-k1”,ty:“str”,ti:“Kraft B”,du:“25min”,ma:false,de:“Nach Rad.”,tg:[“Optional”],st:“B”},
+{id:“p2w2-k2”,ty:“str”,ti:“Kraft A”,du:“20min”,ma:false,de:“Nach langem Rad.”,tg:[“Optional”],st:“A”},
+]},
+{ph:“Phase 2 · Aufbau”,lb:“W7”,dt:“19.–25. Mai”,vo:“~12h”,wk:[
+{id:“p2w3-s1”,ty:“swim”,ti:“Ausdauer”,du:“55min”,ma:true,de:“2×400m + 4×200m gleichmäßig.”,tg:[“Pflicht”]},
+{id:“p2w3-c1”,ty:“course”,ti:“🏊 KURS #4”,du:“60min”,ma:true,de:“Bäderland Festland · Do 28. Mai · 19:45 Uhr.”,tg:[“Pflicht”,“Kurs Do 28. Mai”]},
+{id:“p2w3-r1”,ty:“run”,ti:“Schwellenlauf”,du:“40min”,ma:true,de:“10min WU · 20min @4:55–5:05/km · 10min CD.”,tg:[“Pflicht”]},
+{id:“p2w3-r2”,ty:“run”,ti:“Z2 (vor Kurs)”,du:“40min”,ma:true,de:“Morgens locker.”,tg:[“Pflicht”]},
+{id:“p2w3-r3”,ty:“run”,ti:“Langer Lauf”,du:“80min”,ma:true,de:“Z2 durchgehend.”,tg:[“Pflicht”]},
+{id:“p2w3-b1”,ty:“bike”,ti:“Waseberg Aufbau”,du:“90min”,ma:true,de:“8× Waseberg-Rampe Z4/Z5.”,tg:[“Pflicht”]},
+{id:“p2w3-br”,ty:“brick”,ti:“Brick Session”,du:“2h20”,ma:true,de:“2h Rad Z2 → 20min Lauf Z2–Z3.”,tg:[“Pflicht”,“Am Stück”]},
+{id:“p2w3-k1”,ty:“str”,ti:“Kraft C”,du:“25min”,ma:false,de:“Nach Rad.”,tg:[“Optional”],st:“C”},
+]},
+{ph:“Phase 2 · Aufbau”,lb:“W8 · Erholung”,dt:“26. Mai–01. Jun”,vo:“~7h”,tp2:true,wk:[
+{id:“p2w4-s1”,ty:“swim”,ti:“Locker Technik”,du:“35min”,ma:true,de:“Kein Druck.”,tg:[“Pflicht”]},
+{id:“p2w4-c1”,ty:“course”,ti:“🏊 KURS #5”,du:“60min”,ma:true,de:“Bäderland Festland · Do 04. Jun · 19:45 Uhr.”,tg:[“Pflicht”,“Kurs Do 04. Jun”]},
+{id:“p2w4-r1”,ty:“run”,ti:“Z1 Lauf”,du:“30min”,ma:true,de:“Sehr locker.”,tg:[“Pflicht”]},
+{id:“p2w4-b1”,ty:“bike”,ti:“Erholungsfahrt”,du:“60min”,ma:true,de:“Z1–Z2.”,tg:[“Pflicht”]},
+{id:“p2w4-k1”,ty:“str”,ti:“Kraft Mini”,du:“20min”,ma:false,de:“Leichte Aktivierung.”,tg:[“Optional”],st:“MINI”},
+]},
+{ph:“Phase 3 · Build”,lb:“W9”,dt:“02.–08. Jun”,vo:“~12h”,wk:[
+{id:“p3w1-s1”,ty:“swim”,ti:“Ausdauer 3×400m”,du:“60min”,ma:true,de:“WU 400m · 3×400m gleichmäßig · CD 200m.”,tg:[“Pflicht”]},
+{id:“p3w1-c1”,ty:“course”,ti:“🏊 KURS #6”,du:“60min”,ma:true,de:“Bäderland Festland · Do 11. Jun · 19:45 Uhr.”,tg:[“Pflicht”,“Kurs Do 11. Jun”]},
+{id:“p3w1-r1”,ty:“run”,ti:“Intervalle”,du:“50min”,ma:true,de:“10min WU · 4×8min @4:55–5:00/km · 2min Pause · 10min CD.”,tg:[“Pflicht”],tp:“Danach: nächste Session locker.”},
+{id:“p3w1-r2”,ty:“run”,ti:“Z2 (vor Kurs)”,du:“40min”,ma:true,de:“Morgens locker.”,tg:[“Pflicht”]},
+{id:“p3w1-r3”,ty:“run”,ti:“Langer Lauf”,du:“85min”,ma:true,de:“Z2 mit 10min Z3 in der Mitte.”,tg:[“Pflicht”]},
+{id:“p3w1-b1”,ty:“bike”,ti:“4×4 VO2max”,du:“55min”,ma:true,de:“15min WU · 4×4min @~115% FTP, 3min Pause · 10min CD.”,tg:[“Pflicht”],tp:“4×4 ist intensiv — danach Ruhetag.”},
+{id:“p3w1-b2”,ty:“bike”,ti:“Langer Rad-Tag”,du:“3h”,ma:true,de:“Z2 Basis. Letzten 30min Tempo Z3.”,tg:[“Pflicht”]},
+{id:“p3w1-k1”,ty:“str”,ti:“Kraft A”,du:“20min”,ma:false,de:“Nach Rad.”,tg:[“Optional”],st:“A”},
+]},
+{ph:“Phase 3 · Build”,lb:“W10”,dt:“09.–15. Jun”,vo:“~12h”,wk:[
+{id:“p3w2-s1”,ty:“swim”,ti:“Ausdauer 5×300m”,du:“65min”,ma:true,de:“WU 400m · 5×300m konstant · 4×50m Sprint · CD.”,tg:[“Pflicht”]},
+{id:“p3w2-c1”,ty:“course”,ti:“🏊 KURS #7”,du:“60min”,ma:true,de:“Bäderland Festland · Do 18. Jun · 19:45 Uhr.”,tg:[“Pflicht”,“Kurs Do 18. Jun”]},
+{id:“p3w2-r1”,ty:“run”,ti:“Schwellenlauf”,du:“45min”,ma:true,de:“10min WU · 25min @5:00–5:05/km · 10min CD.”,tg:[“Pflicht”]},
+{id:“p3w2-r2”,ty:“run”,ti:“Z2 (vor Kurs)”,du:“35min”,ma:true,de:“Morgens locker.”,tg:[“Pflicht”]},
+{id:“p3w2-r3”,ty:“run”,ti:“Langer Lauf”,du:“90min”,ma:true,de:“Z2.”,tg:[“Pflicht”]},
+{id:“p3w2-b1”,ty:“bike”,ti:“4×4 VO2max”,du:“60min”,ma:true,de:“15min WU · 4×4min @115% FTP · 15min CD.”,tg:[“Pflicht”]},
+{id:“p3w2-br”,ty:“brick”,ti:“Race-Pace Brick”,du:“3h”,ma:true,de:“2h30 Rad (Z2 + 3×10min @88% FTP) → 25min Lauf Z2–Z3.”,tg:[“Pflicht”,“Am Stück”]},
+{id:“p3w2-k1”,ty:“str”,ti:“Kraft B”,du:“20min”,ma:false,de:“Nach Rad.”,tg:[“Optional”],st:“B”},
+]},
+{ph:“Phase 3 · Build”,lb:“W11”,dt:“16.–22. Jun”,vo:“~12h”,wk:[
+{id:“p3w3-s1”,ty:“swim”,ti:“1.500m Zeit-Test”,du:“60min”,ma:true,de:“WU 400m · 1.500m kontinuierlich – Zeit stoppen!”,tg:[“Pflicht”],tp:“Konservativ starten.”},
+{id:“p3w3-c1”,ty:“course”,ti:“🏊 KURS #8 – LETZTER”,du:“60min”,ma:true,de:“Bäderland Festland · Do 25. Jun · 19:45 Uhr.”,tg:[“Pflicht”,“Kurs Do 25. Jun”]},
+{id:“p3w3-r1”,ty:“run”,ti:“Intervalle”,du:“45min”,ma:true,de:“10min WU · 5×6min @4:50/km · 90s Pause · 10min CD.”,tg:[“Pflicht”]},
+{id:“p3w3-r2”,ty:“run”,ti:“Z2 (vor Kurs)”,du:“35min”,ma:true,de:“Morgens locker.”,tg:[“Pflicht”]},
+{id:“p3w3-r3”,ty:“run”,ti:“Langer Lauf”,du:“90min”,ma:true,de:“Z2.”,tg:[“Pflicht”]},
+{id:“p3w3-b1”,ty:“bike”,ti:“Sweetspot 2×20”,du:“90min”,ma:true,de:“15min WU · 2×20min @90% FTP · 15min CD.”,tg:[“Pflicht”]},
+{id:“p3w3-b2”,ty:“bike”,ti:“Langer Rad-Tag”,du:“3h15”,ma:true,de:“80% Z2, 20% Z3.”,tg:[“Pflicht”]},
+{id:“p3w3-k1”,ty:“str”,ti:“Kraft A”,du:“20min”,ma:false,de:“Nach Rad.”,tg:[“Optional”],st:“A”},
+]},
+{ph:“Phase 3 · Build”,lb:“W12 · Erholung”,dt:“23.–29. Jun”,vo:“~7h”,tp2:true,wk:[
+{id:“p3w4-s1”,ty:“swim”,ti:“Technik locker”,du:“40min”,ma:true,de:“Eigenständig weiterarbeiten.”,tg:[“Pflicht”]},
+{id:“p3w4-s2”,ty:“swim”,ti:“Leichte Technik”,du:“35min”,ma:false,de:“Drills auf Gefühl.”,tg:[“Optional”]},
+{id:“p3w4-r1”,ty:“run”,ti:“Z1–Z2 Lauf”,du:“35min”,ma:true,de:“Locker, Strides.”,tg:[“Pflicht”]},
+{id:“p3w4-b1”,ty:“bike”,ti:“Erholungsfahrt”,du:“70min”,ma:true,de:“Z1–Z2.”,tg:[“Pflicht”]},
+{id:“p3w4-k1”,ty:“str”,ti:“Kraft Mini”,du:“20min”,ma:false,de:“Leichte Aktivierung.”,tg:[“Optional”],st:“MINI”},
+]},
+{ph:“Phase 4 · Peak”,lb:“W13”,dt:“30. Jun–06. Jul”,vo:“~12h”,wk:[
+{id:“p4w1-s1”,ty:“swim”,ti:“2×1.000m Ausdauer”,du:“70min”,ma:true,de:“WU 400m · 2×1.000m kontinuierlich · CD 200m.”,tg:[“Pflicht”]},
+{id:“p4w1-s2”,ty:“swim”,ti:“Pace 10×100m”,du:“55min”,ma:true,de:“WU 400m · 10×100m @WK-Pace, 15s Pause · CD.”,tg:[“Pflicht”]},
+{id:“p4w1-r1”,ty:“run”,ti:“Race-Pace Lauf”,du:“45min”,ma:true,de:“10min WU · 25min @4:50–5:00/km · 10min CD.”,tg:[“Pflicht”]},
+{id:“p4w1-r2”,ty:“run”,ti:“Langer Lauf”,du:“90min”,ma:true,de:“Z2 nach großem Rad-Tag.”,tg:[“Pflicht”]},
+{id:“p4w1-b1”,ty:“bike”,ti:“5×4 VO2max”,du:“65min”,ma:true,de:“15min WU · 5×4min @115% FTP · 10min CD.”,tg:[“Pflicht”],tp:“Härteste Rad-Einheit.”},
+{id:“p4w1-b2”,ty:“bike”,ti:“LÄNGSTER RAD-TAG”,du:“3h30”,ma:true,de:“Z2 Basis. Letzten 45min @88% FTP.”,tg:[“Pflicht”]},
+{id:“p4w1-k1”,ty:“str”,ti:“Kraft B”,du:“20min”,ma:false,de:“Letzte volle Kraft-Einheit.”,tg:[“Optional”],st:“B”},
+]},
+{ph:“Phase 4 · Peak”,lb:“W14 · Sprint-WK”,dt:“07.–13. Jul”,vo:“~8h”,ra:true,wk:[
+{id:“p4w2-s1”,ty:“swim”,ti:“Aktivierung”,du:“30min”,ma:true,de:“Locker, Technik.”,tg:[“Pflicht”]},
+{id:“p4w2-s2”,ty:“swim”,ti:“Pre-Race Schwimmen”,du:“20min”,ma:false,de:“Tag vor WK: 10–15min locker.”,tg:[“Optional”]},
+{id:“p4w2-r1”,ty:“run”,ti:“Aktivierung Lauf”,du:“25min”,ma:true,de:“Z1 + 4×10s Strides.”,tg:[“Pflicht”]},
+{id:“p4w2-b1”,ty:“bike”,ti:“Aktivierung Rad”,du:“45min”,ma:true,de:“Locker mit 4×1min @Race-Pace.”,tg:[“Pflicht”]},
+{id:“p4w2-rc”,ty:“race”,ti:“🏁 SPRINT TRIATHLON HH”,du:“Race”,ma:true,de:“So 13. Jul. Generalprobe!”,tg:[“Pflicht”,“So 13. Jul”]},
+]},
+{ph:“Phase 4 · Peak”,lb:“W15 · Erholung”,dt:“14.–20. Jul”,vo:“~7h”,tp2:true,wk:[
+{id:“p4w3-s1”,ty:“swim”,ti:“Strecken nach WK”,du:“30min”,ma:true,de:“Locker.”,tg:[“Pflicht”]},
+{id:“p4w3-s2”,ty:“swim”,ti:“Leichte Ausdauer”,du:“40min”,ma:false,de:“Z2.”,tg:[“Optional”]},
+{id:“p4w3-r1”,ty:“run”,ti:“Z1 Lauf”,du:“25min”,ma:true,de:“Sehr locker.”,tg:[“Pflicht”]},
+{id:“p4w3-r2”,ty:“run”,ti:“Z2 Lauf”,du:“35min”,ma:false,de:“Wenn erholt.”,tg:[“Optional”]},
+{id:“p4w3-b1”,ty:“bike”,ti:“Erholungsfahrt”,du:“60min”,ma:true,de:“Z1–Z2.”,tg:[“Pflicht”]},
+{id:“p4w3-b2”,ty:“bike”,ti:“Z2 Aufbau”,du:“90min”,ma:false,de:“Wenn Beine gut.”,tg:[“Optional”]},
+]},
+{ph:“Phase 4 · Peak”,lb:“W16”,dt:“21.–27. Jul”,vo:“~10h”,wk:[
+{id:“p4w4-s1”,ty:“swim”,ti:“2×800m Race-Pace”,du:“60min”,ma:true,de:“WU 400m · 2×800m @Race-Pace · CD.”,tg:[“Pflicht”]},
+{id:“p4w4-s2”,ty:“swim”,ti:“4×200m Pace”,du:“40min”,ma:true,de:“WU 300m · 4×200m @Race-Pace · CD.”,tg:[“Pflicht”]},
+{id:“p4w4-r1”,ty:“run”,ti:“Race-Pace Intervalle”,du:“40min”,ma:true,de:“10min WU · 3×8min @Race-Pace · 10min CD.”,tg:[“Pflicht”]},
+{id:“p4w4-r2”,ty:“run”,ti:“Langer Lauf”,du:“60min”,ma:true,de:“Z2 locker.”,tg:[“Pflicht”]},
+{id:“p4w4-b1”,ty:“bike”,ti:“Sweetspot 2×15”,du:“75min”,ma:true,de:“15min WU · 2×15min @90% FTP · 15min CD.”,tg:[“Pflicht”]},
+{id:“p4w4-br”,ty:“brick”,ti:“LETZTER GROSSER BRICK”,du:“2h20”,ma:true,de:“2h Rad @88% FTP → 20min Lauf @Race-Pace.”,tg:[“Pflicht”,“Am Stück”]},
+{id:“p4w4-k1”,ty:“str”,ti:“Kraft Mini”,du:“20min”,ma:false,de:“Letztes Kraft-Training.”,tg:[“Optional”],st:“MINI”},
+]},
+{ph:“Phase 5 · Taper”,lb:“W17 · Taper”,dt:“28. Jul–01. Aug”,vo:“~5h”,tp2:true,wk:[
+{id:“p5w1-s1”,ty:“swim”,ti:“Aktivierung”,du:“30min”,ma:true,de:“200m WU · 4×100m @Race-Pace · 200m CD.”,tg:[“Pflicht”]},
+{id:“p5w1-s2”,ty:“swim”,ti:“Einschwimmen Pre-Race”,du:“15min”,ma:false,de:“Sa vor Rennen.”,tg:[“Optional”]},
+{id:“p5w1-r1”,ty:“run”,ti:“Aktivierung Lauf”,du:“20min”,ma:true,de:“Z1 + 4×10s Strides.”,tg:[“Pflicht”]},
+{id:“p5w1-b1”,ty:“bike”,ti:“Aktivierung Rad”,du:“45min”,ma:true,de:“30min Z2 + 3×2min @Race-Pace.”,tg:[“Pflicht”]},
+{id:“p5w1-rc”,ty:“race”,ti:“🏆 OSTEEMANN MITTELDISTANZ”,du:“Race”,ma:true,de:“So 02. Aug · 1,9km → 90km → 21km!”,tg:[“Pflicht”,“So 02. Aug”]},
+]},
+{ph:“Phase 6 · Rom”,lb:“W18 · Erholung”,dt:“03.–09. Aug”,vo:“~6h”,tp2:true,wk:[
+{id:“r1-r1”,ty:“run”,ti:“Regenerationslauf”,du:“30min”,ma:true,de:“Z1, erste Schritte nach OstseeMan.”,tg:[“Pflicht”],tp:“Aktive Erholung. Kein Druck.”},
+{id:“r1-r2”,ty:“run”,ti:“Z2 Lauf”,du:“40min”,ma:false,de:“Wenn Beine gut — locker Z2.”,tg:[“Optional”]},
+{id:“r1-s1”,ty:“swim”,ti:“Entspannungsschwimmen”,du:“30min”,ma:true,de:“Locker, Muskeln strecken.”,tg:[“Pflicht”]},
+{id:“r1-b1”,ty:“bike”,ti:“Erholungsfahrt”,du:“60min”,ma:true,de:“Z1–Z2.”,tg:[“Pflicht”]},
+{id:“r1-b2”,ty:“bike”,ti:“Kurze Z2”,du:“60min”,ma:false,de:“Optional.”,tg:[“Optional”]},
+]},
+{ph:“Phase 6 · Rom”,lb:“W19”,dt:“10.–16. Aug”,vo:“~8h”,wk:[
+{id:“r2-r1”,ty:“run”,ti:“Z2 Aufbau ⛰️ Hügel”,du:“50min”,ma:true,de:“Z2 mit 1–2% Steigung (Laufband oder hügelige Strecke). Erster normaler Lauf nach OstseeMan.”,tg:[“Pflicht”,“Hügel”],tp:“Rom hat Anstiege — gewöhne den Körper jetzt schon dran.”},
+{id:“r2-r2”,ty:“run”,ti:“Schwelleneinstieg”,du:“45min”,ma:true,de:“10min WU · 15min @5:00/km · 10min CD.”,tg:[“Pflicht”]},
+{id:“r2-r3”,ty:“run”,ti:“Langer Lauf”,du:“70min”,ma:true,de:“Z2 durchgehend.”,tg:[“Pflicht”]},
+{id:“r2-r4”,ty:“run”,ti:“Z2 Recovery”,du:“35min”,ma:false,de:“Locker nach langem Lauf.”,tg:[“Optional”]},
+{id:“r2-s1”,ty:“swim”,ti:“Ausdauer”,du:“45min”,ma:true,de:“1×800m + 4×100m locker.”,tg:[“Pflicht”]},
+{id:“r2-b1”,ty:“bike”,ti:“Z2 Erhaltung”,du:“75min”,ma:true,de:“Z2 locker.”,tg:[“Pflicht”]},
+{id:“r2-b2”,ty:“bike”,ti:“Z2 Erhaltung”,du:“75min”,ma:true,de:“Z2 locker.”,tg:[“Pflicht”]},
+]},
+{ph:“Phase 6 · Rom”,lb:“W20”,dt:“17.–23. Aug”,vo:“~9h”,wk:[
+{id:“r3-r1”,ty:“run”,ti:“Intervalle Aufbau”,du:“50min”,ma:true,de:“10min WU · 4×1km @4:44/km · 2min Pause · 10min CD.”,tg:[“Pflicht”],tp:“4:44/km = Sub-1:40-Tempo.”},
+{id:“r3-r2”,ty:“run”,ti:“Schwellenlauf”,du:“45min”,ma:true,de:“10min WU · 20min @4:55–5:00/km · 10min CD.”,tg:[“Pflicht”]},
+{id:“r3-r3”,ty:“run”,ti:“Langer Lauf ⛰️ Hügel”,du:“80min”,ma:true,de:“Z2 mit 2× 5min Anstieg in der Mitte. Letzten 10min @5:10/km.”,tg:[“Pflicht”,“Hügel”]},
+{id:“r3-r4”,ty:“run”,ti:“Z2 Lauf”,du:“40min”,ma:false,de:“Locker.”,tg:[“Optional”]},
+{id:“r3-s1”,ty:“swim”,ti:“Ausdauer”,du:“45min”,ma:true,de:“2×600m + 4×100m gleichmäßig.”,tg:[“Pflicht”]},
+{id:“r3-b1”,ty:“bike”,ti:“Z2 Erhaltung”,du:“75min”,ma:true,de:“Z2 locker.”,tg:[“Pflicht”]},
+{id:“r3-b2”,ty:“bike”,ti:“Z2 + Hill Strides”,du:“75min”,ma:true,de:“Z2 + 4×30s Hill Sprints am Waseberg.”,tg:[“Pflicht”,“Hügel”]},
+]},
+{ph:“Phase 6 · Rom”,lb:“W21 · Erholung”,dt:“24.–30. Aug”,vo:“~6h”,tp2:true,wk:[
+{id:“r4-r1”,ty:“run”,ti:“Z2 Lauf”,du:“40min”,ma:true,de:“Locker Z2.”,tg:[“Pflicht”]},
+{id:“r4-r2”,ty:“run”,ti:“Kurze Intervalle”,du:“35min”,ma:true,de:“10min WU · 3×1km @4:44/km · CD.”,tg:[“Pflicht”]},
+{id:“r4-r3”,ty:“run”,ti:“Langer Lauf (kurz)”,du:“60min”,ma:true,de:“Z2, bewusst kürzer.”,tg:[“Pflicht”]},
+{id:“r4-s1”,ty:“swim”,ti:“Locker”,du:“35min”,ma:true,de:“Entspannt.”,tg:[“Pflicht”]},
+{id:“r4-b1”,ty:“bike”,ti:“Erholungsfahrt”,du:“60min”,ma:true,de:“Z1–Z2.”,tg:[“Pflicht”]},
+{id:“r4-b2”,ty:“bike”,ti:“Z2”,du:“60min”,ma:false,de:“Optional.”,tg:[“Optional”]},
+]},
+{ph:“Phase 6 · Rom”,lb:“W22”,dt:“31. Aug–06. Sep”,vo:“~9h”,wk:[
+{id:“r5-r1”,ty:“run”,ti:“1km-Intervalle”,du:“55min”,ma:true,de:“10min WU · 5×1km @4:44/km · 90s Pause · 10min CD.”,tg:[“Pflicht”],tp:“Gleichmäßige Splits wichtiger als Schnitt.”},
+{id:“r5-r2”,ty:“run”,ti:“Schwellenlauf”,du:“50min”,ma:true,de:“10min WU · 25min @4:55–5:00/km · 10min CD.”,tg:[“Pflicht”]},
+{id:“r5-r3”,ty:“run”,ti:“Langer Lauf ⛰️ Hügel”,du:“85min”,ma:true,de:“Z2 auf hügeliger Strecke (oder Laufband 1–2%). Letzten 15min aufdrehen.”,tg:[“Pflicht”,“Hügel”],tp:“Wichtig für Rom: km-15-Anstieg zur Piazza di Spagna.”},
+{id:“r5-r4”,ty:“run”,ti:“Z2 Lauf”,du:“40min”,ma:false,de:“Locker.”,tg:[“Optional”]},
+{id:“r5-s1”,ty:“swim”,ti:“Ausdauer”,du:“45min”,ma:true,de:“2×800m kontinuierlich.”,tg:[“Pflicht”]},
+{id:“r5-b1”,ty:“bike”,ti:“Z2 Erhaltung”,du:“75min”,ma:true,de:“Z2 locker.”,tg:[“Pflicht”]},
+{id:“r5-b2”,ty:“bike”,ti:“Z2 Erhaltung”,du:“75min”,ma:true,de:“Z2 locker.”,tg:[“Pflicht”]},
+]},
+{ph:“Phase 6 · Rom”,lb:“W23”,dt:“07.–13. Sep”,vo:“~9h”,wk:[
+{id:“r6-r1”,ty:“run”,ti:“Tempolauf 2km-Blöcke”,du:“55min”,ma:true,de:“10min WU · 3×2km @4:44/km · 2min Pause · 10min CD.”,tg:[“Pflicht”],tp:“2km-Blöcke = Wettkampf-Rhythmus.”},
+{id:“r6-r2”,ty:“run”,ti:“Schwellenlauf lang”,du:“55min”,ma:true,de:“10min WU · 30min @4:55–5:00/km · 10min CD.”,tg:[“Pflicht”]},
+{id:“r6-r3”,ty:“run”,ti:“Langer Lauf ⛰️ Hügel”,du:“90min”,ma:true,de:“Z2 hügelig 70min, letzten 20min @5:05–5:10/km.”,tg:[“Pflicht”,“Hügel”]},
+{id:“r6-r4”,ty:“run”,ti:“Z2 Lauf”,du:“40min”,ma:false,de:“Locker.”,tg:[“Optional”]},
+{id:“r6-s1”,ty:“swim”,ti:“Ausdauer”,du:“45min”,ma:true,de:“1×1.500m kontinuierlich.”,tg:[“Pflicht”]},
+{id:“r6-b1”,ty:“bike”,ti:“Z2 Erhaltung”,du:“75min”,ma:true,de:“Z2 locker.”,tg:[“Pflicht”]},
+{id:“r6-b2”,ty:“bike”,ti:“Z2 Erhaltung”,du:“75min”,ma:true,de:“Z2 locker.”,tg:[“Pflicht”]},
+]},
+{ph:“Phase 6 · Rom”,lb:“W24 · Erholung”,dt:“14.–20. Sep”,vo:“~6h”,tp2:true,wk:[
+{id:“r7-r1”,ty:“run”,ti:“Z2 Lauf”,du:“40min”,ma:true,de:“Erholungswoche.”,tg:[“Pflicht”]},
+{id:“r7-r2”,ty:“run”,ti:“Intervalle (kurz)”,du:“40min”,ma:true,de:“10min WU · 4×1km @4:44/km · CD.”,tg:[“Pflicht”]},
+{id:“r7-r3”,ty:“run”,ti:“Langer Lauf (kurz)”,du:“60min”,ma:true,de:“Z2, bewusst kürzer.”,tg:[“Pflicht”]},
+{id:“r7-s1”,ty:“swim”,ti:“Locker”,du:“35min”,ma:true,de:“Entspannt.”,tg:[“Pflicht”]},
+{id:“r7-b1”,ty:“bike”,ti:“Erholungsfahrt”,du:“60min”,ma:true,de:“Z1–Z2.”,tg:[“Pflicht”]},
+]},
+{ph:“Phase 6 · Rom”,lb:“W25 · Peak”,dt:“21.–27. Sep”,vo:“~9h”,wk:[
+{id:“r8-r1”,ty:“run”,ti:“Race-Simulation”,du:“60min”,ma:true,de:“10min WU · 5×2km @4:44/km · 90s Pause · 10min CD.”,tg:[“Pflicht”],tp:“Härteste Einheit. Wenn das geht — Sub 1:40 ist drin!”},
+{id:“r8-r2”,ty:“run”,ti:“Schwellenlauf”,du:“50min”,ma:true,de:“10min WU · 25min @4:55/km · 10min CD.”,tg:[“Pflicht”]},
+{id:“r8-r3”,ty:“run”,ti:“Langer Lauf ⛰️ Hügel”,du:“90min”,ma:true,de:“Z2 hügelig 75min, letzten 15min @4:55/km. Generalprobe.”,tg:[“Pflicht”,“Hügel”]},
+{id:“r8-r4”,ty:“run”,ti:“Z2 Lauf”,du:“40min”,ma:false,de:“Locker.”,tg:[“Optional”]},
+{id:“r8-s1”,ty:“swim”,ti:“Ausdauer”,du:“45min”,ma:true,de:“Locker, 1×1.000m + 4×100m.”,tg:[“Pflicht”]},
+{id:“r8-b1”,ty:“bike”,ti:“Z2 Erhaltung”,du:“75min”,ma:true,de:“Z2 locker.”,tg:[“Pflicht”]},
+{id:“r8-b2”,ty:“bike”,ti:“Z2 Erhaltung”,du:“75min”,ma:true,de:“Z2 locker.”,tg:[“Pflicht”]},
+]},
+{ph:“Phase 6 · Rom”,lb:“W26 · Taper”,dt:“28. Sep–04. Okt”,vo:“~6h”,tp2:true,wk:[
+{id:“r9-r1”,ty:“run”,ti:“Z2 Lauf”,du:“40min”,ma:true,de:“Volumen runter, Beine frisch.”,tg:[“Pflicht”]},
+{id:“r9-r2”,ty:“run”,ti:“Intervalle (reduziert)”,du:“40min”,ma:true,de:“10min WU · 3×1km @4:44/km · CD.”,tg:[“Pflicht”]},
+{id:“r9-r3”,ty:“run”,ti:“Mittlerer Lauf”,du:“55min”,ma:true,de:“Z2, letzten 10min aufdrehen.”,tg:[“Pflicht”]},
+{id:“r9-s1”,ty:“swim”,ti:“Locker”,du:“30min”,ma:true,de:“Sehr locker.”,tg:[“Pflicht”]},
+{id:“r9-b1”,ty:“bike”,ti:“Kurze Aktivierung”,du:“45min”,ma:true,de:“Z2 locker.”,tg:[“Pflicht”]},
+]},
+{ph:“Phase 6 · Rom”,lb:“W27 · Race Week”,dt:“05.–19. Okt”,vo:“~4h”,ra:true,wk:[
+{id:“r10-r1”,ty:“run”,ti:“Kurzer Z2 Lauf”,du:“30min”,ma:true,de:“Mo: locker, Beine wach.”,tg:[“Pflicht”]},
+{id:“r10-r2”,ty:“run”,ti:“Aktivierung”,du:“20min”,ma:true,de:“Mi/Do: 15min Z1 + 4×10s Strides.”,tg:[“Pflicht”]},
+{id:“r10-b1”,ty:“bike”,ti:“Kurze Aktivierung”,du:“30min”,ma:false,de:“Optional: 20min locker Z1.”,tg:[“Optional”]},
+{id:“r10-s1”,ty:“swim”,ti:“Kurzes Einschwimmen”,du:“20min”,ma:false,de:“Optional: 15min locker.”,tg:[“Optional”]},
+{id:“r10-rc”,ty:“race”,ti:“🏆 ROM HALBMARATHON”,du:“Race”,ma:true,de:“So 19. Okt · Sub 1:40 · 4:44/km · Erste 5km bei 4:50/km halten! Anstieg km 15 zur Piazza di Spagna — ruhig bleiben.”,tg:[“Pflicht”,“So 19. Okt”]},
+]},
+];
+const GMATCH=P.flatMap((wk,wi)=>wk.wk.map(w=>({id:w.id,wi,ty:w.ty,min:pm(w.du)})));
+const aw=()=>P.flatMap(w=>w.wk);
+let done=new Set(),logs={},exp=new Set(),pid=null,selrpe=null,aph=null,owk=new Set(),ast=‘ov’,viewedWi=null;
+
+// ───────────── Storage: localStorage instead of MCP ─────────────
+function loadStorage(){
+try{
+const d=localStorage.getItem(‘om26done’);
+const l=localStorage.getItem(‘om26logs’);
+if(d)done=new Set(JSON.parse(d));
+if(l)logs=JSON.parse(l);
+}catch(e){console.warn(‘Storage load failed’,e);}
+}
+function persist(){
+try{
+localStorage.setItem(‘om26done’,JSON.stringify([…done]));
+localStorage.setItem(‘om26logs’,JSON.stringify(logs));
+}catch(e){console.warn(‘Storage save failed’,e);}
+}
+function exportData(){
+const data={done:[…done],logs:logs,exported:new Date().toISOString(),version:1};
+const blob=new Blob([JSON.stringify(data,null,2)],{type:‘application/json’});
+const url=URL.createObjectURL(blob);
+const a=document.createElement(‘a’);
+a.href=url;
+a.download=`ostseeman-rom-2026-backup-${new Date().toISOString().slice(0,10)}.json`;
+document.body.appendChild(a);a.click();document.body.removeChild(a);
+URL.revokeObjectURL(url);
+}
+function importData(){document.getElementById(‘importFile’).click();}
+function handleImport(file){
+if(!file)return;
+const r=new FileReader();
+r.onload=e=>{
+try{
+const data=JSON.parse(e.target.result);
+if(data.done&&data.logs){
+if(confirm(`Daten importieren? Aktuelle Daten werden überschrieben.\n\n${data.done.length} erledigte Workouts vom ${data.exported?new Date(data.exported).toLocaleDateString('de-DE'):'?'}`)){
+done=new Set(data.done);
+logs=data.logs;
+persist();ra();
+alert(‘✓ Import erfolgreich’);
+}
+}else{alert(‘❌ Ungültiges Backup-Format’);}
+}catch(err){alert(‘❌ Datei konnte nicht gelesen werden’);}
+};
+r.readAsText(file);
+}
+
+function init(){
+loadStorage();
+document.getElementById(‘dlo’).style.display=‘none’;
+document.getElementById(‘dc’).style.display=‘block’;
+viewedWi=cwi();aph=P[cwi()].ph;owk.add(cwi());rd();cdown();
+// show install hint on iOS Safari (not standalone)
+const isIOS=/iPad|iPhone|iPod/.test(navigator.userAgent);
+const isStandalone=window.navigator.standalone===true;
+const hintDismissed=localStorage.getItem(‘om26_hint_dismissed’);
+if(isIOS&&!isStandalone&&!hintDismissed){
+document.getElementById(‘installhint’).style.display=‘block’;
+}
+}
+
+function cwi(){const s=new Date(‘2026-04-06’);return Math.max(0,Math.min(Math.floor((new Date()-s)/(864e5*7)),P.length-1));}
+
+function navWk(delta){const newWi=viewedWi+delta;if(newWi<0||newWi>=P.length)return;viewedWi=newWi;rd();}
+function goToday(){viewedWi=cwi();rd();}
+function closeHint(){document.getElementById(‘installhint’).style.display=‘none’;localStorage.setItem(‘om26_hint_dismissed’,‘1’);}
+
+function tog(id){
+if(done.has(id)){done.delete(id);delete logs[id];persist();ra();return;}
+pid=id;selrpe=null;
+const w=aw().find(x=>x.id===id);
+document.getElementById(‘mti’).textContent=w?w.ti:‘Einheit’;
+document.getElementById(‘msu’).textContent=w?(w.du+’ · ‘+(TM[w.ty]?.l||’’)):’’;
+document.getElementById(‘ldu’).value=’’;document.getElementById(‘ldi’).value=’’;document.getElementById(‘lno’).value=’’;
+document.getElementById(‘ldf’).style.display=DT.includes(w?.ty)?‘block’:‘none’;
+const rr=document.getElementById(‘rrow’);rr.innerHTML=’’;
+for(let n=1;n<=10;n++){const b=document.createElement(‘button’);b.className=‘rbtn’;b.textContent=n;b.dataset.rpe=n;rr.appendChild(b);}
+document.getElementById(‘mbd’).classList.add(‘on’);
+}
+function selr(n){selrpe=n;document.querySelectorAll(’.rbtn’).forEach(b=>{b.style.cssText=’’;});const b=document.querySelectorAll(’.rbtn’)[n-1];if(b){b.style.background=n<=3?‘rgba(74,106,42,.2)’:n<=6?‘rgba(138,106,24,.2)’:‘rgba(184,58,26,.2)’;b.style.borderColor=n<=3?‘var(–run)’:n<=6?‘var(–bike)’:‘var(–race)’;b.style.fontWeight=‘600’;}}
+function savelog(){if(!pid)return;logs[pid]={dur:parseFloat(document.getElementById(‘ldu’).value)||null,dist:parseFloat(document.getElementById(‘ldi’).value)||null,rpe:selrpe,note:document.getElementById(‘lno’).value.trim(),ts:Date.now()};done.add(pid);persist();closeM();ra();}
+function slog(){if(!pid)return;logs[pid]={ts:Date.now()};done.add(pid);persist();closeM();ra();}
+function closeM(){document.getElementById(‘mbd’).classList.remove(‘on’);pid=null;}
+function te(id){if(exp.has(id))exp.delete(id);else exp.add(id);ra();}
+
+function card(w){
+const tm=TM[w.ty]||TM.swim,id=done.has(w.id),ie=exp.has(w.id);
+const gl=id?logs[w.id]:null;
+const ls=gl?.dur?` · ${gl.dur}min${gl.rpe?' · RPE '+gl.rpe:''}${gl.garmin?' 🔄':''}`:gl?.garmin?’ · 🔄’:’’;
+const th=w.tg.map(t=>`<span class="tg ${t==='Pflicht'?'m':t==='Optional'?'o':t==='Hügel'?'h':t.startsWith('Kurs')?'k':'n'}">${t}</span>`).join(’’);
+const bh=ie?`<div class="wbd on">${w.de}${w.tp?`<div class="wtip"><b>💡</b> ${w.tp}</div>`:''}${w.st&&!id?`<div class="wsb"><strong>${STR[w.st].l}</strong>${STR[w.st].e}</div>`:''}${gl?.garmin?`<div class="wgb">🔄 Garmin Import${gl.note?` · ${gl.note}`:’’}</div>`:''}</div>`:’’;
+return`<div class="wc${id?' done':''}${w.ty==='race'?' rcx':''}" data-wid="${w.id}"><div class="wb ${w.ty}"></div><div class="wct" data-action="expand"><div class="wic ${w.ty}">${tm.i}</div><div class="wif"><div class="wti">${w.ti}</div><div class="wme">${w.du}${id?' · ✓'+ls:''}</div></div><button class="wck" data-action="toggle">${id?'✓':'○'}</button></div><div class="wtg">${th}</div>${bh}</div>`;
+}
+
+function rd(){
+if(viewedWi===null)viewedWi=cwi();
+const wk=P[viewedWi],ci=cwi(),isCur=viewedWi===ci;
+document.getElementById(‘wnPrev’).disabled=viewedWi<=0;
+document.getElementById(‘wnNext’).disabled=viewedWi>=P.length-1;
+document.getElementById(‘wnToday’).classList.toggle(‘on’,!isCur);
+let titleHtml=wk.lb;
+if(isCur)titleHtml+=’ <span class="now-pill">● Jetzt</span>’;
+else if(wk.ra)titleHtml+=’ <span class="race-pill">🏁 Race</span>’;
+else if(wk.tp2)titleHtml+=’ <span class="taper-pill">↓ Taper</span>’;
+document.getElementById(‘dwk’).innerHTML=titleHtml;
+document.getElementById(‘dph’).textContent=wk.ph;
+document.getElementById(‘ddt’).textContent=wk.dt;
+document.getElementById(‘dvol’).textContent=wk.vo;
+const ma=wk.wk.filter(w=>w.ma),op=wk.wk.filter(w=>!w.ma);
+const dc=ma.filter(w=>done.has(w.id)).length,to=ma.length;
+document.getElementById(‘ddo’).textContent=dc;document.getElementById(‘dto’).textContent=to;
+document.getElementById(‘rf’).style.strokeDashoffset=to?169.6*(1-dc/to):169.6;
+document.getElementById(‘dmt’).textContent=`Pflicht-Workouts · ${dc}/${to}`;
+document.getElementById(‘dmand’).innerHTML=ma.map(card).join(’’);
+document.getElementById(‘dot’).textContent=op.length?‘Optional · nach Gefühl’:’’;
+document.getElementById(‘dopt’).innerHTML=op.map(card).join(’’);
+}
+
+function rplan(){
+const ph=[…new Set(P.map(w=>w.ph))];
+if(!aph)aph=P[cwi()].ph;
+const psc=document.getElementById(‘psc’);psc.innerHTML=’’;
+ph.forEach(p=>{const b=document.createElement(‘button’);b.className=‘phb’+(p===aph?’ on’:’’);b.dataset.phase=p;b.textContent=p.replace(‘Phase ‘,‘P’).replace(’ · ‘,’·’);psc.appendChild(b);});
+const ci=cwi();
+const pw=document.getElementById(‘pw’);pw.innerHTML=’’;
+P.forEach((wk,wi)=>{
+if(wk.ph!==aph)return;
+const io=owk.has(wi),ic=wi===ci,ma=wk.wk.filter(w=>w.ma),dc=ma.filter(w=>done.has(w.id)).length;
+const bg=(ic?`<span style="font-size:9px;color:var(--ol)">● JETZT</span>`:’’)+(wk.ra?`<span class="bxr">🏁</span>`:’’)+(wk.tp2&&!wk.ra?`<span class="bxt">↓</span>`:’’);
+const div=document.createElement(‘div’);
+div.className=‘wr’+(ic?’ cw’:’’)+(wk.ra?’ rw’:’’)+(wk.tp2&&!wk.ra?’ tw’:’’)+(io?’ op’:’’);
+div.dataset.wi=wi;
+div.innerHTML=`<div class="wh" data-action="togWk"><div class="wnum">${wi+1}</div><div class="wi2"><div class="wna">${wk.lb}</div><div class="wda">${wk.dt} · ${wk.vo}</div></div><div class="wr2">${bg}<div class="wpg">${dc}/${ma.length}</div></div><div class="wch">▶</div></div>${io?`<div class="wpo">${wk.wk.map(card).join(’’)}</div>`:'<div class="wpo"></div>'}`;
+pw.appendChild(div);
+});
+}
+function setPh(p){aph=p;rplan();}
+function togWk(wi){if(owk.has(wi))owk.delete(wi);else owk.add(wi);rplan();}
+
+function sst(t){
+ast=t;
+document.querySelectorAll(’.stbb’).forEach(b=>b.classList.toggle(‘on’,b.dataset.stab===t));
+[‘ov’,‘ch’,‘lg’].forEach(s=>document.getElementById(‘s’+s).style.display=s===t?‘block’:‘none’);
+if(t===‘ch’)setTimeout(dcharts,50);if(t===‘lg’)dfeed();
+}
+function rstats(){
+const all=aw(),td=all.filter(w=>done.has(w.id)).length;
+const ma=all.filter(w=>w.ma),md=ma.filter(w=>done.has(w.id)).length;
+const lm=Object.values(logs).reduce((s,l)=>s+(l.dur||0),0);
+const ws=P.filter(wk=>wk.wk.some(w=>done.has(w.id))).length;
+document.getElementById(‘sg’).innerHTML=`<div class="sc"><div class="sn" style="color:var(--run)">${td}</div><div class="sl">Erledigt gesamt</div></div><div class="sc"><div class="sn" style="color:var(--swim)">${md}<span style="font-size:16px;color:var(--dim)">/${ma.length}</span></div><div class="sl">Pflicht erledigt</div></div><div class="sc"><div class="sn" style="color:var(--bike)">${Math.round(lm/60*10)/10}<span style="font-size:14px;color:var(--dim)">h</span></div><div class="sl">Stunden geloggt</div></div><div class="sc"><div class="sn" style="color:var(--str)">${ws}</div><div class="sl">Wochen gestartet</div></div>`;
+document.getElementById(‘leglist’).innerHTML=[‘swim’,‘bike’,‘run’,‘brick’,‘str’,‘course’,‘race’].map(t=>{
+const tm=TM[t];if(!tm)return’’;const tw=all.filter(w=>w.ty===t);if(!tw.length)return’’;
+const td2=tw.filter(w=>done.has(w.id)).length,lm2=tw.filter(w=>done.has(w.id)).reduce((s,w)=>s+(logs[w.id]?.dur||0),0);
+return`<div class="legr"><div class="legl"><div class="legd" style="background:${tm.c}"></div><span style="font-size:13px">${tm.i} ${tm.l}</span></div><div style="text-align:right;font-size:12px;color:var(--dim)">${td2}/${tw.length}${lm2>0?`<br><span style="font-size:10px">${Math.round(lm2)}min</span>`:''}</div></div>`;
+}).join(’’);
+if(ast===‘ch’)setTimeout(dcharts,50);if(ast===‘lg’)dfeed();
+}
+function dcharts(){
+const cv=document.getElementById(‘cvv’),W=Math.max(600,P.length*28+60);cv.width=W;cv.height=200;
+const ctx=cv.getContext(‘2d’);ctx.clearRect(0,0,W,200);
+const wks=P.map(wk=>({l:wk.lb.replace(/\D/g,’’).slice(0,2)||’?’,p:wk.wk.reduce((s,w)=>s+pm(w.du),0),a:wk.wk.filter(w=>done.has(w.id)).reduce((s,w)=>s+(logs[w.id]?.dur||0),0)}));
+const mx=Math.max(…wks.map(w=>Math.max(w.p,w.a)),60),pd={l:38,r:12,t:14,b:28},bw=(W-pd.l-pd.r)/wks.length,bw2=bw*.34;
+[0,.25,.5,.75,1].forEach(f=>{const y=pd.t+(1-f)*(200-pd.t-pd.b);ctx.strokeStyle=‘rgba(0,0,0,.06)’;ctx.lineWidth=1;ctx.beginPath();ctx.moveTo(pd.l,y);ctx.lineTo(W-pd.r,y);ctx.stroke();ctx.fillStyle=‘rgba(90,106,80,.6)’;ctx.font=‘9px DM Mono,monospace’;ctx.textAlign=‘right’;ctx.fillText(Math.round(mx*f)+‘m’,pd.l-3,y+3);});
+wks.forEach((w,i)=>{const x=pd.l+i*bw+bw/2,hp=(w.p/mx)*(200-pd.t-pd.b),ha=(w.a/mx)*(200-pd.t-pd.b);ctx.fillStyle=‘rgba(90,114,72,.2)’;ctx.fillRect(x-bw2-1,200-pd.b-hp,bw2,hp);ctx.fillStyle=w.a>0?‘rgba(74,106,42,.75)’:‘rgba(74,106,42,.08)’;ctx.fillRect(x+1,200-pd.b-ha,bw2,ha);ctx.fillStyle=‘rgba(90,106,80,.5)’;ctx.font=‘8px DM Mono,monospace’;ctx.textAlign=‘center’;ctx.fillText(w.l,x,200-pd.b+10);});
+document.getElementById(‘cleg’).innerHTML=`<div class="cli"><div class="cld" style="background:rgba(90,114,72,.3)"></div>Geplant</div><div class="cli"><div class="cld" style="background:rgba(74,106,42,.75)"></div>Tatsächlich</div>`;
+const rc=document.getElementById(‘cvr’),lg=aw().filter(w=>done.has(w.id)&&logs[w.id]?.rpe).map(w=>({r:logs[w.id].rpe,t:w.ty}));
+const RW=Math.max(500,lg.length*32+60);rc.width=RW;rc.height=160;
+const rctx=rc.getContext(‘2d’);rctx.clearRect(0,0,RW,160);
+if(!lg.length){rctx.fillStyle=‘rgba(90,106,80,.4)’;rctx.font=‘12px DM Mono,monospace’;rctx.textAlign=‘center’;rctx.fillText(‘Noch keine RPE-Daten’,RW/2,80);return;}
+const rp={l:28,r:12,t:14,b:22},rw=(RW-rp.l-rp.r)/Math.max(lg.length,1);
+[2,4,6,8,10].forEach(v=>{const y=rp.t+(1-v/10)*(160-rp.t-rp.b);rctx.strokeStyle=‘rgba(0,0,0,.06)’;rctx.lineWidth=1;rctx.beginPath();rctx.moveTo(rp.l,y);rctx.lineTo(RW-rp.r,y);rctx.stroke();rctx.fillStyle=‘rgba(90,106,80,.5)’;rctx.font=‘9px DM Mono,monospace’;rctx.textAlign=‘right’;rctx.fillText(v,rp.l-3,y+3);});
+rctx.beginPath();lg.forEach((e,i)=>{const x=rp.l+i*rw+rw/2,y=rp.t+(1-e.r/10)*(160-rp.t-rp.b);i===0?rctx.moveTo(x,y):rctx.lineTo(x,y);});rctx.strokeStyle=‘rgba(138,106,24,.4)’;rctx.lineWidth=2;rctx.stroke();
+lg.forEach((e,i)=>{const x=rp.l+i*rw+rw/2,y=rp.t+(1-e.r/10)*(160-rp.t-rp.b);rctx.beginPath();rctx.arc(x,y,5,0,Math.PI*2);rctx.fillStyle=e.r<=3?‘rgba(74,106,42,.8)’:e.r<=6?‘rgba(138,106,24,.8)’:‘rgba(184,58,26,.8)’;rctx.fill();});
+}
+function dfeed(){
+const en=aw().filter(w=>done.has(w.id)).map(w=>({w,l:logs[w.id]||{},wi:P.findIndex(wk=>wk.wk.some(x=>x.id===w.id))})).sort((a,b)=>(b.l.ts||0)-(a.l.ts||0));
+if(!en.length){document.getElementById(‘feed’).innerHTML=’<div class="emp">Noch keine Einheiten abgeschlossen.</div>’;return;}
+document.getElementById(‘feed’).innerHTML=en.map(({w,l,wi})=>{
+const tm=TM[w.ty]||TM.swim,dt=l.ts?new Date(l.ts).toLocaleDateString(‘de-DE’,{day:‘2-digit’,month:‘2-digit’}):’’;
+const rc=l.rpe?(l.rpe<=3?‘rl’:l.rpe<=6?‘rm’:‘rh’):’’;
+const sh=[l.dur?`<span class="fs">⏱ ${l.dur}min</span>`:’’,l.dist?`<span class="fs">📍 ${l.dist}km</span>`:’’,l.rpe?`<span class="fs ${rc}">RPE ${l.rpe}/10</span>`:’’,l.garmin?`<span class="fs gtg">🔄 Garmin</span>`:’’,l.hr?`<span class="fs">Ø${l.hr}bpm</span>`:’’,l.note&&!l.garmin?`<span class="fs">"${l.note}"</span>`:’’].filter(Boolean).join(’’);
+return`<div class="fi"><div class="fdot" style="background:${tm.c}"></div><div class="fb"><div class="ft">${tm.i} ${w.ti}</div><div class="fm">${P[wi]?.lb||''} · ${dt}</div>${sh?`<div class="fss">${sh}</div>`:''}</div></div>`;
+}).join(’’);
+}
+
+const GTYPE=t=>{const l=t.toLowerCase();if(l.includes(‘running’))return’run’;if(l.includes(‘cycling’)||l.includes(‘virtual’))return’bike’;if(l.includes(‘swim’))return’swim’;if(l.includes(‘strength’)||l.includes(‘hiit’))return’str’;return’other’;};
+const GICO={run:‘🏃’,bike:‘🚴’,swim:‘🏊’,str:‘💪’,other:‘⚡’};
+const GWIX=d=>{const diff=new Date(d)-new Date(‘2026-04-06’);if(diff<0)return -1;return Math.floor(diff/(864e5*7));};
+function gparse(t){const lines=t.trim().split(’\n’);const hdrs=lines[0].split(’,’).map(h=>h.trim().replace(/^”|”$/g,’’));return lines.slice(1).map(line=>{const vals=[];let c=’’,q=false;for(const ch of line){if(ch===’”’){q=!q;}else if(ch===’,’&&!q){vals.push(c.trim());c=’’;}else{c+=ch;}}vals.push(c.trim());const o={};hdrs.forEach((h,i)=>o[h]=(vals[i]||’’).replace(/^”|”$/g,’’).trim());return o;}).filter(r=>r[‘Activity Type’]&&r[‘Date’]);}
+function gdur(t){if(!t||t===’–’)return 0;const p=t.split(’:’).map(Number);if(p.length===3)return p[0]*60+p[1]+p[2]/60;if(p.length===2)return p[0]+p[1]/60;return 0;}
+function gdist(d){if(!d||d===’–’)return null;return parseFloat(d.replace(/,/g,’’))||null;}
+function ghr(v){return(!v||v===’–’)?null:parseInt(v);}
+let gmatches=[],gmatched=new Set();
+function gfind(ty,wi,dur,already){const cands=GMATCH.filter(w=>w.wi===wi&&w.ty===ty&&!already.has(w.id));if(!cands.length)return null;const sc=cands.map(w=>({w,s:Math.abs(w.min-dur)/Math.max(w.min,dur,1)})).sort((a,b)=>a.s-b.s);return sc[0].s<0.65?sc[0].w:cands[0];}
+function ghandle(file){if(!file)return;const r=new FileReader();r.onload=e=>gprocess(e.target.result);r.readAsText(file);}
+function gprocess(text){const rows=gparse(text);const acts=rows.map(r=>({_ty:r[‘Activity Type’],_gt:GTYPE(r[‘Activity Type’]),_date:r[‘Date’],_ti:r[‘Title’],_dur:gdur(r[‘Time’]),_dist:gdist(r[‘Distance’]),_hr:ghr(r[‘Avg HR’]),_mhr:ghr(r[‘Max HR’]),_pw:ghr(r[‘Avg Power’]),_cal:gdist(r[‘Calories’]),_pace:r[‘Avg Pace’],_wi:GWIX(r[‘Date’]),_ts:new Date(r[‘Date’]).getTime()})).filter(a=>a._gt!==‘other’||a._dur>0).sort((a,b)=>b._ts-a._ts);gmatched=new Set();gmatches=acts.map(a=>{const wo=gfind(a._gt,a._wi,a._dur,gmatched);if(wo)gmatched.add(wo.id);return{a,wo,conf:false,skip:false,ovr:wo?.id||’’};});document.getElementById(‘gup’).style.display=‘none’;document.getElementById(‘gres’).style.display=‘block’;grender();}
+function grender(){const mt=gmatches.filter(m=>m.wo),nm=gmatches.filter(m=>!m.wo);const conf=gmatches.filter(m=>m.conf).length;document.getElementById(‘gsbar’).innerHTML=`<div class="spill">Gesamt: <span>${gmatches.length}</span></div><div class="spill">Gematcht: <span>${mt.length}</span></div><div class="spill">Ohne Match: <span>${nm.length}</span></div><div class="spill">Bestätigt: <span>${conf}</span></div>`;document.getElementById(‘gmtit’).textContent=mt.length?`${mt.length} gematchte Aktivitäten`:’’;document.getElementById(‘gmlist’).innerHTML=mt.map(m=>gcrd(gmatches.indexOf(m))).join(’’);document.getElementById(‘gntit’).textContent=nm.length?`${nm.length} ohne Plan-Match`:’’;document.getElementById(‘gnlist’).innerHTML=nm.map(m=>gcrd(gmatches.indexOf(m))).join(’’);const n=gmatches.filter(m=>m.conf).length;const btn=document.getElementById(‘gimpbtn’);btn.disabled=n===0;btn.textContent=n>0?`${n} Aktivität${n>1?'en':''} importieren`:‘Alle bestätigten importieren’;}
+function gcrd(idx){const m=gmatches[idx],a=m.a,gt=a._gt;const dt=new Date(a._date).toLocaleDateString(‘de-DE’,{day:‘2-digit’,month:‘2-digit’,year:‘2-digit’,hour:‘2-digit’,minute:‘2-digit’});const wlb=a._wi>=0&&a._wi<P.length?`${P[a._wi].lb} · ${P[a._wi].dt}`:a._wi<0?‘Vor Planstart’:‘Nach Plan’;const stats=[a._dur>0?`${Math.round(a._dur)}min`:’’,a._dist?`${a._dist}${gt==='swim'?'m':'km'}`:’’,a._hr?`Ø${a._hr}bpm`:’’,a._pw?`Ø${a._pw}W`:’’].filter(Boolean).map(s=>`<span class="mcs">${s}</span>`).join(’’);const opts=GMATCH.filter(w=>w.wi===a._wi&&w.ty===gt);const sel=opts.length>1?`<select class="mcsel" data-action="gsetovr" data-idx="${idx}">${opts.map(w=>`<option value=”${w.id}”${m.ovr===w.id?’ selected’:’’}>${aw().find(x=>x.id===w.id)?.ti||w.id} (${w.min}min)</option>`).join('')}</select>`:’’;const planName=m.wo?aw().find(x=>x.id===m.wo.id)?.ti:’’;const acts=m.conf?`<button class="mcbtn cdone" disabled>✓ Importiert</button><button class="mcbtn sk2" data-action="gunc" data-idx="${idx}">Rückgängig</button>`:m.skip?`<button class="mcbtn conf" data-action="gconf" data-idx="${idx}">Doch importieren</button><button class="mcbtn cdone" style="cursor:default" disabled>Übersprungen</button>`:`<button class="mcbtn conf" data-action="gconf" data-idx="${idx}" ${!m.wo&&!opts.length?'disabled':''}>Bestätigen ✓</button><button class="mcbtn sk2" data-action="gskip" data-idx="${idx}">Überspringen</button>`;return`<div class="mc${m.conf?' conf':''}${m.skip?' skip':''}${!m.wo?' noma':''}"><div class="mcb ${gt}"></div><div class="mct"><div class="mci ${gt}">${GICO[gt]||'⚡'}</div><div class="mcif"><div class="mctit">${a._ti||a._ty}</div><div class="mcda">${dt} · ${wlb}</div><div class="mcst">${stats}</div></div></div><div class="mcm"><div class="mcml">${planName?'Plan-Match':'Kein Match'}</div>${sel}<div class="mcmp${planName?'':' nm'}">${planName?`📋 ${planName}`:opts.length?'Bitte oben zuweisen':'Keine passende Einheit'}</div></div><div class="mca">${acts}</div></div>`;}
+function gsetovr(idx,wid){gmatches[idx].ovr=wid;gmatches[idx].wo=GMATCH.find(w=>w.id===wid)||null;}
+function gconf(idx){const m=gmatches[idx];if(!m.wo&&m.ovr)m.wo=GMATCH.find(w=>w.id===m.ovr);if(!m.wo)return;m.conf=true;m.skip=false;grender();}
+function gunc(idx){gmatches[idx].conf=false;grender();}
+function gskip(idx){gmatches[idx].skip=true;gmatches[idx].conf=false;grender();}
+function gcommit(){const btn=document.getElementById(‘gimpbtn’);btn.disabled=true;btn.textContent=‘Speichere…’;let n=0;for(const m of gmatches){if(!m.conf||!m.wo)continue;const a=m.a,wid=m.wo.id;done.add(wid);logs[wid]={dur:Math.round(a._dur)||null,dist:a._dist||null,rpe:null,note:`${a._ti}${a._hr?', Ø'+a._hr+'bpm':''}${a._pw?', Ø'+a._pw+'W':''}`,ts:a._ts,garmin:true,hr:a._hr,maxHr:a._mhr,power:a._pw,cal:a._cal,pace:a._pace!==’–’?a._pace:null};n++;}persist();document.getElementById(‘gsucc’).style.display=‘block’;document.getElementById(‘gsucc’).innerHTML=`<div class="sbanner"><h3>✓ ${n} Aktivität${n>1?'en':''} importiert</h3><p>Workouts sind im Plan abgehakt.</p></div>`;btn.style.display=‘none’;ra();}
+function greset(){gmatches=[];gmatched=new Set();document.getElementById(‘gup’).style.display=‘block’;document.getElementById(‘gres’).style.display=‘none’;document.getElementById(‘gfile’).value=’’;document.getElementById(‘gsucc’).style.display=‘none’;}
+
+function showv(n){document.querySelectorAll(’.view’).forEach(v=>v.classList.remove(‘on’));document.querySelectorAll(’.bb’).forEach(b=>b.classList.toggle(‘on’,b.dataset.view===n));document.getElementById(‘v’+n).classList.add(‘on’);if(n===‘p’){if(!aph)aph=P[cwi()].ph;rplan();}if(n===‘s’)rstats();if(n===‘d’)rd();window.scrollTo(0,0);}
+function ra(){const av=document.querySelector(’.view.on’);if(!av)return;const id=av.id.replace(‘v’,’’);if(id===‘d’)rd();if(id===‘p’)rplan();if(id===‘s’)rstats();}
+function cdown(){const now=new Date(),om=new Date(‘2026-08-02’),rom=new Date(‘2026-10-19’);const next=now<om?om:rom,label=now<om?‘OstseeMan’:‘Rom HM’;const diff=next-now;if(diff<0){document.getElementById(‘ncd’).textContent=‘🏆 Race Day!’;return;}const w=Math.floor(diff/(864e5*7)),d=Math.floor((diff%(864e5*7))/864e5);document.getElementById(‘ncd’).textContent=`${label} · ${w}w ${d}d`;setTimeout(cdown,60000);}
+
+document.addEventListener(‘click’,function(e){
+const t=e.target;
+const bb=t.closest(’.bb’);if(bb&&bb.dataset.view){showv(bb.dataset.view);return;}
+if(t.closest(’[data-action=“prevWk”]’)){navWk(-1);return;}
+if(t.closest(’[data-action=“nextWk”]’)){navWk(1);return;}
+if(t.closest(’[data-action=“goToday”]’)){goToday();return;}
+if(t.closest(’[data-action=“closeHint”]’)){closeHint();return;}
+if(t.closest(’[data-action=“exportData”]’)){exportData();return;}
+if(t.closest(’[data-action=“importData”]’)){importData();return;}
+const ph=t.closest(’.phb’);if(ph&&ph.dataset.phase){setPh(ph.dataset.phase);return;}
+const wh=t.closest(’.wh’);if(wh){const wr=wh.closest(’.wr’);if(wr&&wr.dataset.wi!==undefined){togWk(parseInt(wr.dataset.wi,10));return;}}
+const wck=t.closest(’.wck’);if(wck){const wc=wck.closest(’.wc’);if(wc&&wc.dataset.wid){e.stopPropagation();tog(wc.dataset.wid);return;}}
+const wct=t.closest(’.wct’);if(wct){const wc=wct.closest(’.wc’);if(wc&&wc.dataset.wid){te(wc.dataset.wid);return;}}
+const rb=t.closest(’.rbtn’);if(rb&&rb.dataset.rpe){selr(parseInt(rb.dataset.rpe,10));return;}
+if(t.closest(’[data-action=“savelog”]’)){savelog();return;}
+if(t.closest(’[data-action=“slog”]’)){slog();return;}
+if(t.closest(’[data-action=“closeM”]’)){closeM();return;}
+if(t.id===‘mbd’){closeM();return;}
+const sb=t.closest(’.stbb’);if(sb&&sb.dataset.stab){sst(sb.dataset.stab);return;}
+if(t.closest(’[data-action=“gcommit”]’)){gcommit();return;}
+if(t.closest(’[data-action=“greset”]’)){greset();return;}
+const gconfBtn=t.closest(’[data-action=“gconf”]’);if(gconfBtn){gconf(parseInt(gconfBtn.dataset.idx,10));return;}
+const guncBtn=t.closest(’[data-action=“gunc”]’);if(guncBtn){gunc(parseInt(guncBtn.dataset.idx,10));return;}
+const gskipBtn=t.closest(’[data-action=“gskip”]’);if(gskipBtn){gskip(parseInt(gskipBtn.dataset.idx,10));return;}
+});
+document.addEventListener(‘change’,function(e){
+const sel=e.target.closest(’[data-action=“gsetovr”]’);
+if(sel){gsetovr(parseInt(sel.dataset.idx,10),sel.value);return;}
+if(e.target.id===‘gfile’){ghandle(e.target.files[0]);return;}
+if(e.target.id===‘importFile’){handleImport(e.target.files[0]);return;}
+});
+const dz=document.getElementById(‘dz’);
+dz.addEventListener(‘dragover’,e=>{e.preventDefault();dz.classList.add(‘drag’);});
+dz.addEventListener(‘dragleave’,()=>dz.classList.remove(‘drag’));
+dz.addEventListener(‘drop’,e=>{e.preventDefault();dz.classList.remove(‘drag’);ghandle(e.dataTransfer.files[0]);});
+
+init();
+</script>
+
+</body>
+</html>
